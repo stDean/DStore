@@ -10,12 +10,12 @@ const connectDB = require("./config/db");
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.status(200).json({ msg: "Welcome to the home page" });
-});
+app.use(express.urlencoded({ extended: false }));
 
 // add routes
+const AuthRouter = require("./routes/auth.route");
+
+app.use("/api/auth", AuthRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

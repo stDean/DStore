@@ -18,6 +18,11 @@ app.get("/", (req, res) => {
 // add routes
 
 // add middlewares
+const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");
+const ERROR_HANDLING_MIDDLEWARE = require("./middleware/error-handling");
+
+app.use(NOT_FOUND_MIDDLEWARE);
+app.use(ERROR_HANDLING_MIDDLEWARE);
 
 const start = async () => {
   try {

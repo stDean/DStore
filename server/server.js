@@ -14,8 +14,11 @@ app.use(express.urlencoded({ extended: false }));
 
 // add routes
 const AuthRouter = require("./routes/auth.route");
+const UserRouter = require("./routes/user.route");
+const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
 app.use("/api/auth", AuthRouter);
+app.use("/api", AUTH_MIDDLEWARE, UserRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

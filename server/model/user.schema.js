@@ -29,11 +29,27 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please enter a secure password."],
-      minLength: 4,
+      minLength: [6, "Password has to be at least 6 characters long."],
     },
     role: {
       type: String,
       default: "user",
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    cart: {
+      type: Array,
+      default: [],
+    },
+    address: {
+      type: mongoose.Types.ObjectId,
+      ref: "Address",
+    },
+    wishlist: {
+      type: mongoose.Types.ObjectId,
+      ref: "Product",
     },
   },
   { timestamps: true }

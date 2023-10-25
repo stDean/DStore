@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
@@ -30,14 +31,33 @@ const userSchema = new mongoose.Schema(
       required: [true, "Please enter a secure password."],
       minLength: 4,
     },
+    role: {
+      type: String,
+      default: "user",
+    },
   },
   { timestamps: true }
 );
 
+// a pre save method to hash password
 userSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+// method to compare password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// add method to create JWT
+userSchema.methods.createJWT = function () {
+  return jwt.sign(
+    { userId: this._id, name: this.firstName },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_LIFETIME }
+  );
+};
 
 //Export the model
 module.exports = mongoose.model("User", userSchema);

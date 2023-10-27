@@ -63,7 +63,6 @@ const AuthCtrl = {
   },
   LogOut: async (req, res) => {
     res.clearCookie("refreshToken", { path: "/api/auth/refresh_token" });
-    console.log(req.cookies.refreshToken);
     return res.status(StatusCodes.OK).json({ msg: "Logged out." });
   },
 };

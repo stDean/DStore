@@ -75,5 +75,13 @@ userSchema.methods.createJWT = function () {
   );
 };
 
+userSchema.methods.generateRefreshJWT = function () {
+  return jwt.sign(
+    { userId: this._id, name: this.firstName },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_REFRESH_LIFETIME }
+  );
+};
+
 //Export the model
 module.exports = mongoose.model("User", userSchema);

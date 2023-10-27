@@ -20,6 +20,6 @@ router.get("/users", AdminMiddleware, getUsers);
 router.patch("/update-role/:id", AdminMiddleware, updateUserRole);
 router.patch("/block-user/:id", AdminMiddleware, blockUser);
 router.patch("/unblock-user/:id", AdminMiddleware, unBlockUser);
-router.delete("/delete-user", AdminMiddleware, deleteUser);
+router.delete("/delete-user/:id", AdminMiddleware, deleteUser);
 
 module.exports = router;

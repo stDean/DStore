@@ -36,7 +36,7 @@ const UserCtrl = {
     res.status(StatusCodes.OK).json(updatedUser);
   },
   deleteUser: async (req, res) => {
-    const { _id: id } = req.user;
+    const { id } = req.params;
 
     await User.findByIdAndDelete(id);
     res.status(StatusCodes.OK).json({ msg: `Account deleted successfully` });

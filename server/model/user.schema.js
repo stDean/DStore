@@ -52,19 +52,12 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Product",
     },
-    passwordChangedDate: { type: Date },
-    passwordResetToken: { type: String },
-    passwordResetExpires: { type: Date },
   },
   { timestamps: true }
 );
 
 // a pre save method to hash password
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
-
+userSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
@@ -89,18 +82,6 @@ userSchema.methods.generateRefreshJWT = function () {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_REFRESH_LIFETIME }
   );
-};
-
-userSchema.methods.generateResetPasswordToke = function () {
-  const token = crypto.randomBytes(32).toString();
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(token)
-    .digest("hex");
-
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10mins
-
-  return token;
 };
 
 //Export the model

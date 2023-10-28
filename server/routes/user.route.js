@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const AdminMiddleware = require("../middleware/admin.middleware");
+const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 
 const UserCtrl = require("../controller/user.ctrl");
 const {
@@ -16,10 +16,10 @@ const {
 router.get("/user", getUser);
 router.patch("/update-user", updateUser);
 
-router.get("/users", AdminMiddleware, getUsers);
-router.patch("/update-role/:id", AdminMiddleware, updateUserRole);
-router.patch("/block-user/:id", AdminMiddleware, blockUser);
-router.patch("/unblock-user/:id", AdminMiddleware, unBlockUser);
-router.delete("/delete-user/:id", AdminMiddleware, deleteUser);
+router.get("/users", ADMIN_MIDDLEWARE, getUsers);
+router.patch("/update-role/:id", ADMIN_MIDDLEWARE, updateUserRole);
+router.patch("/block-user/:id", ADMIN_MIDDLEWARE, blockUser);
+router.patch("/unblock-user/:id", ADMIN_MIDDLEWARE, unBlockUser);
+router.delete("/delete-user/:id", ADMIN_MIDDLEWARE, deleteUser);
 
 module.exports = router;

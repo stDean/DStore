@@ -1,12 +1,14 @@
 const User = require("../model/user.schema");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const {
   UnauthenticatedError,
   BadRequestError,
   NotFoundError,
 } = require("../errors");
 const generateAccessJWT = require("../utils/accesstoken");
+const sendMail = require("./sendMail");
 
 const AuthCtrl = {
   register: async (req, res) => {
@@ -18,7 +20,7 @@ const AuthCtrl = {
       );
     }
 
-    const createdUser = await User.create({ ...req.body }).select("-password");
+    const createdUser = await User.create({ ...req.body });
     res.status(StatusCodes.CREATED).json({ createdUser });
   },
   login: async (req, res) => {
@@ -64,6 +66,43 @@ const AuthCtrl = {
   LogOut: async (req, res) => {
     res.clearCookie("refreshToken", { path: "/api/auth/refresh_token" });
     return res.status(StatusCodes.OK).json({ msg: "Logged out." });
+  },
+  forgetPassword: async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+      throw new BadRequestError("Please provide your email");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new NotFoundError("No user with this email.");
+    }
+
+    const accessToken = generateAccessJWT(user._id);
+    const url = `${process.env.CLIENT_URL}/auth/reset-password/${accessToken}`;
+    sendMail(email, url, "Reset your password", "Reset password");
+
+    res.status(StatusCodes.OK).json({ msg: "Reset Password" });
+  },
+  resetPassword: async (req, res) => {
+    const {
+      body: { password },
+      user: { _id: id },
+    } = req;
+    if (!password || password.length < 6) {
+      throw new BadRequestError("Provide a more secure password.");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { password: hashPassword },
+      { new: true, runValidator: true }
+    );
+
+    res.status(StatusCodes.OK).json({ user, msg: "password updated" });
   },
 };
 

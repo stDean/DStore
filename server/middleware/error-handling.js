@@ -25,7 +25,7 @@ const ErrorHandlerMiddleware = (err, req, res, next) => {
 
   // error when id value in the params is wrong
   if (err.name === "CastError") {
-    customError.msg = `No user found with id : ${err.value}`;
+    customError.msg = `No result found with id : ${err.value}`;
     customError.statusCode = 404;
   }
 

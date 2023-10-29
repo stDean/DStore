@@ -20,11 +20,13 @@ app.use(morgan("tiny"));
 const AuthRouter = require("./routes/auth.route");
 const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
+const BlogRouter = require("./routes/blog.route");
 const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
 app.use("/api/auth", AuthRouter);
 app.use("/api", AUTH_MIDDLEWARE, UserRouter);
 app.use("/api/product", AUTH_MIDDLEWARE, ProductRouter);
+app.use("/api/blog", AUTH_MIDDLEWARE, BlogRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

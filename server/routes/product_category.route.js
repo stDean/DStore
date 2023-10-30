@@ -14,11 +14,11 @@ const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 
 router
   .route("/")
-  .get(ADMIN_MIDDLEWARE, getProductCategories)
+  .get(getProductCategories)
   .post(ADMIN_MIDDLEWARE, createProductCategory);
 router
   .route("/:id")
-  .get(ADMIN_MIDDLEWARE, getProductCategory)
+  .get(getProductCategory)
   .patch(ADMIN_MIDDLEWARE, updateProductCategory)
   .delete(ADMIN_MIDDLEWARE, deleteProductCategory);
 

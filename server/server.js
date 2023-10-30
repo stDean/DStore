@@ -22,13 +22,17 @@ const UserRouter = require("./routes/user.route");
 const ProductRouter = require("./routes/product.route");
 const BlogRouter = require("./routes/blog.route");
 const ProductCategoryRouter = require("./routes/product_category.route");
+const BlogCategoryRouter = require("./routes/blog_category.route");
+const BrandRouter = require("./routes/brand.route");
 const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
 app.use("/api/auth", AuthRouter);
 app.use("/api", AUTH_MIDDLEWARE, UserRouter);
 app.use("/api/product", AUTH_MIDDLEWARE, ProductRouter);
 app.use("/api/blog", AUTH_MIDDLEWARE, BlogRouter);
-app.use("/api/category", AUTH_MIDDLEWARE, ProductCategoryRouter);
+app.use("/api/product-category", AUTH_MIDDLEWARE, ProductCategoryRouter);
+app.use("/api/blog-category", AUTH_MIDDLEWARE, BlogCategoryRouter);
+app.use("/api/brand", AUTH_MIDDLEWARE, BrandRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

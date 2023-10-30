@@ -97,6 +97,61 @@ const ProductCtrl = {
 
     res.status(StatusCodes.OK).json({ msg: "Product deleted!." });
   },
+  rateProduct: async (req, res) => {
+    const {
+      user: { _id: userId },
+      body: { star, productId, comment },
+    } = req;
+
+    const product = await Product.findById(productId);
+
+    // check if product has been rated
+    const alreadyRated = product.ratings.find(
+      ({ ratingBy }) => ratingBy.toString() === userId.toString()
+    );
+
+    // update the star or rate the product
+    if (alreadyRated) {
+      await Product.updateOne(
+        {
+          ratings: { $elemMatch: alreadyRated },
+        },
+        { $set: { "ratings.$.star": star, "ratings.$.comment": comment } },
+        { new: true }
+      );
+
+      // res.status(StatusCodes.OK).json(updateRating);
+    } else {
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          $push: {
+            ratings: { star: star, ratingBy: userId, comment: comment },
+          },
+        },
+        { new: true, runValidators: true }
+      );
+
+      // res.status(StatusCodes.OK).json(rateProduct);
+    }
+
+    const ratingCount = product.ratings.length;
+    let ratingSum = product.ratings
+      .map(item => item.star) //[4.5, 4.5]
+      .reduce((accumulator, value) => accumulator + value, 0); // 0 + 4.5 = 4.5; 4.5 + 4.5 = 9;
+
+    let accumulatedProductRating = ratingSum / ratingCount; // 9 / 2 = 4.5;
+
+    const finalProduct = await Product.findByIdAndUpdate(
+      productId,
+      {
+        totalRatings: accumulatedProductRating,
+      },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(StatusCodes.OK).json(finalProduct);
+  },
 };
 
 module.exports = ProductCtrl;

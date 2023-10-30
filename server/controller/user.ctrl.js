@@ -1,6 +1,7 @@
 const { NotFoundError } = require("../errors");
 const User = require("../model/user.schema");
 const { StatusCodes } = require("http-status-codes");
+const FindLogic = require("../utils/checkDB");
 
 const UserCtrl = {
   getUsers: async (req, res) => {
@@ -92,6 +93,36 @@ const UserCtrl = {
     }
 
     res.status(StatusCodes.OK).json({ msg: "User Unblocked." });
+  },
+  addToWishlist: async (req, res) => {
+    const {
+      user: { _id: userId },
+      body: { productId },
+    } = req;
+    const user = await User.findById(userId);
+    const alreadyInWishlist = FindLogic(user.wishlist, productId);
+
+    if (alreadyInWishlist) {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: { wishlist: productId },
+        },
+        { new: true, runValidators: true }
+      );
+
+      res.status(StatusCodes.OK).json(user);
+    } else {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: { wishlist: productId },
+        },
+        { new: true, runValidators: true }
+      );
+
+      res.status(StatusCodes.OK).json(user);
+    }
   },
 };
 

@@ -44,14 +44,18 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    address: {
-      type: mongoose.Types.ObjectId,
-      ref: "Address",
-    },
-    wishlist: {
-      type: mongoose.Types.ObjectId,
-      ref: "Product",
-    },
+    address: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Address",
+      },
+    ],
+    wishlist: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: true }
 );

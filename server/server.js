@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(morgan("tiny"));
 
+
 // add routes
 const AuthRouter = require("./routes/auth.route");
 const UserRouter = require("./routes/user.route");
@@ -24,6 +25,8 @@ const BlogRouter = require("./routes/blog.route");
 const ProductCategoryRouter = require("./routes/product_category.route");
 const BlogCategoryRouter = require("./routes/blog_category.route");
 const BrandRouter = require("./routes/brand.route");
+const CouponRouter = require("./routes/coupon.route");
+
 const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
 app.use("/api/auth", AuthRouter);
@@ -33,6 +36,7 @@ app.use("/api/blog", AUTH_MIDDLEWARE, BlogRouter);
 app.use("/api/product-category", AUTH_MIDDLEWARE, ProductCategoryRouter);
 app.use("/api/blog-category", AUTH_MIDDLEWARE, BlogCategoryRouter);
 app.use("/api/brand", AUTH_MIDDLEWARE, BrandRouter);
+app.use("/api/coupon", AUTH_MIDDLEWARE, CouponRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

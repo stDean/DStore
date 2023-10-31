@@ -1,8 +1,9 @@
 const { NotFoundError } = require("../errors");
 const Blog = require("../model/blog.schema");
-const User = require("../model/user.schema");
 const { StatusCodes } = require("http-status-codes");
 const FindLogic = require("../utils/checkDB");
+const CloudinaryImageUpload = require("../utils/cloudinary");
+const fs = require("fs");
 
 const BlogCtrl = {
   createBlog: async (req, res) => {
@@ -151,6 +152,31 @@ const BlogCtrl = {
 
       return res.status(StatusCodes.OK).json(blog);
     }
+  },
+  uploadBlogImages: async (req, res) => {
+    const { id } = req.params;
+
+    // update the image
+    const uploader = path => CloudinaryImageUpload(path, "blog");
+    const urls = [];
+    const files = req.files;
+    for (let file of files) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      urls.push(newPath);
+
+      fs.unlinkSync(path);
+    }
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      { images: urls.map(file => file) },
+      { new: true, runValidators: true }
+    );
+    if (!blog) {
+      throw new NotFoundError("Blog not found");
+    }
+
+    res.status(StatusCodes.OK).json(blog);
   },
 };
 

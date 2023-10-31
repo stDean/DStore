@@ -31,10 +31,8 @@ var blogSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    image: {
-      type: String,
-      default:
-        "https://imgs.search.brave.com/msNGfstWKoIX-7wPx6HeMg_7hvh8F-ZZA59zCwTr1-k/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAxNS8w/OS8wNC8yMy8yOC93/b3JkcHJlc3MtOTIz/MTg4XzY0MC5qcGc",
+    images: {
+      type: Array,
     },
     author: {
       type: String,

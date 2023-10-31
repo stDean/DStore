@@ -2,6 +2,8 @@ const { NotFoundError, BadRequestError } = require("../errors");
 const Product = require("../model/product.schema");
 const { StatusCodes } = require("http-status-codes");
 const slugify = require("slugify");
+const CloudinaryImageUpload = require("../utils/cloudinary");
+const fs = require("fs");
 
 const ProductCtrl = {
   createProduct: async (req, res) => {
@@ -104,6 +106,9 @@ const ProductCtrl = {
     } = req;
 
     const product = await Product.findById(productId);
+    if (!product) {
+      throw new NotFoundError("Product not found");
+    }
 
     // check if product has been rated
     const alreadyRated = product.ratings.find(
@@ -119,8 +124,6 @@ const ProductCtrl = {
         { $set: { "ratings.$.star": star, "ratings.$.comment": comment } },
         { new: true }
       );
-
-      // res.status(StatusCodes.OK).json(updateRating);
     } else {
       await Product.findByIdAndUpdate(
         productId,
@@ -131,8 +134,6 @@ const ProductCtrl = {
         },
         { new: true, runValidators: true }
       );
-
-      // res.status(StatusCodes.OK).json(rateProduct);
     }
 
     const ratingCount = product.ratings.length;
@@ -151,6 +152,31 @@ const ProductCtrl = {
     );
 
     return res.status(StatusCodes.OK).json(finalProduct);
+  },
+  uploadProductImages: async (req, res) => {
+    const { id } = req.params;
+
+    // update the image
+    const uploader = path => CloudinaryImageUpload(path, "product");
+    const urls = [];
+    const files = req.files;
+    for (let file of files) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      urls.push(newPath);
+
+      fs.unlinkSync(path);
+    }
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { images: urls.map(file => file) },
+      { new: true, runValidators: true }
+    );
+    if (!product) {
+      throw new NotFoundError("Product not found");
+    }
+
+    res.status(StatusCodes.OK).json(product);
   },
 };
 

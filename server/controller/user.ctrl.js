@@ -124,6 +124,23 @@ const UserCtrl = {
       res.status(StatusCodes.OK).json(user);
     }
   },
+  getWishlist: async (req, res) => {
+    const { _id: userId } = req.user;
+    const user = await User.findById(userId).populate("wishlist");
+    res.status(StatusCodes.OK).json(user);
+  },
+  updateUserAddress: async (req, res) => {
+    const {
+      user: { _id: userId },
+    } = req;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { address: req.body.address },
+      { new: true, runValidators: true }
+    );
+    res.status(StatusCodes.OK).json(updatedUser);
+  },
 };
 
 module.exports = UserCtrl;

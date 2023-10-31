@@ -12,11 +12,14 @@ const {
   blockUser,
   unBlockUser,
   addToWishlist,
+  getWishlist,
+  updateUserAddress,
 } = UserCtrl;
 
 router.get("/user", getUser);
 router.patch("/update-user", updateUser);
-router.patch("/wishlist", addToWishlist);
+router.patch("/update-address", updateUserAddress);
+router.route("/wishlist").get(getWishlist).patch(addToWishlist);
 
 router.get("/users", ADMIN_MIDDLEWARE, getUsers);
 router.patch("/update-role/:id", ADMIN_MIDDLEWARE, updateUserRole);

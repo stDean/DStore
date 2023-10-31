@@ -52,6 +52,35 @@ const AuthCtrl = {
 
     res.status(StatusCodes.OK).json({ token: user.createJWT(), user });
   },
+  adminLogin: async (req, res) => {
+    const { email, password: enteredPassword } = req.body;
+    // make sure fields are filled
+    if (!email || !enteredPassword) {
+      throw new BadRequestError("All fields must be filled.");
+    }
+
+    // get the user else throw an error if no user found
+    let findAdmin = await User.findOne({ email });
+    if (!findAdmin || findAdmin.role !== "admin") {
+      throw new UnauthenticatedError("Unauthorized access");
+    }
+
+    // if user found compare the password and throw an error if password don't match
+    const isCorrectPassword = await findAdmin.comparePassword(enteredPassword);
+    if (!isCorrectPassword) {
+      throw new UnauthenticatedError("Incorrect password entered.");
+    }
+
+    // generate refresh token
+    const refreshToken = findAdmin.generateRefreshJWT();
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/api/auth/refresh_token",
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+    });
+
+    res.status(StatusCodes.OK).json(findAdmin);
+  },
   getAccessToken: async (req, res) => {
     const rf_token = req.cookies.refreshToken;
     if (!rf_token) {

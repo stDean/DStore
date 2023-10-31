@@ -5,6 +5,7 @@ const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
 const AuthCtrl = require("../controller/auth.ctrl");
 const {
   login,
+  adminLogin,
   register,
   getAccessToken,
   LogOut,
@@ -14,6 +15,7 @@ const {
 
 router.route("/register").post(register);
 router.route("/login").post(login);
+router.route("/admin-login").post(adminLogin);
 router.route("/refresh_token").post(getAccessToken);
 router.route("/forget-password").post(forgetPassword);
 

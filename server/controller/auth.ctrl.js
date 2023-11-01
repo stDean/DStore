@@ -21,7 +21,7 @@ const AuthCtrl = {
     }
 
     const createdUser = await User.create({ ...req.body });
-    res.status(StatusCodes.CREATED).json({ createdUser });
+    res.status(StatusCodes.CREATED).json(createdUser);
   },
   login: async (req, res) => {
     const { email, password: enteredPassword } = req.body;
@@ -50,7 +50,7 @@ const AuthCtrl = {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
     });
 
-    res.status(StatusCodes.OK).json({ token: user.createJWT(), user });
+    res.status(StatusCodes.OK).json(user);
   },
   adminLogin: async (req, res) => {
     const { email, password: enteredPassword } = req.body;

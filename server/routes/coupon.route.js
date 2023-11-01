@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 const CouponCtrl = require("../controller/coupon.ctrl");
-const { createCoupon, getCoupons, getCoupon, updateCoupon, deleteCoupon } =
-  CouponCtrl;
+const {
+  createCoupon,
+  getCoupons,
+  getCoupon,
+  updateCoupon,
+  deleteCoupon,
+  applyCoupon,
+} = CouponCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 
 router.route("/").post(ADMIN_MIDDLEWARE, createCoupon).get(getCoupons);
+router.post("/apply", applyCoupon);
 router
   .route("/:id")
   .get(getCoupon)

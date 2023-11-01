@@ -26,6 +26,7 @@ const BlogCategoryRouter = require("./routes/blog_category.route");
 const BrandRouter = require("./routes/brand.route");
 const CouponRouter = require("./routes/coupon.route");
 const CartRouter = require("./routes/cart.route");
+const OrderRouter = require("./routes/order.route");
 
 const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
@@ -38,6 +39,7 @@ app.use("/api/blog-category", AUTH_MIDDLEWARE, BlogCategoryRouter);
 app.use("/api/brand", AUTH_MIDDLEWARE, BrandRouter);
 app.use("/api/coupon", AUTH_MIDDLEWARE, CouponRouter);
 app.use("/api/cart", AUTH_MIDDLEWARE, CartRouter);
+app.use("/api/order", AUTH_MIDDLEWARE, OrderRouter);
 
 // add middlewares
 const NOT_FOUND_MIDDLEWARE = require("./middleware/route-not-found");

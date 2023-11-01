@@ -14,10 +14,6 @@ var orderSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "User",
     },
-    orderDate: {
-      type: Date,
-      default: Date.now(),
-    },
     orderStatus: {
       type: String,
       default: "Not Processed",
@@ -27,10 +23,10 @@ var orderSchema = new mongoose.Schema(
         "Dispatched",
         "Canceled",
         "Delivered",
+        "Cash On Delivery"
       ],
     },
-    paymentMethod: {},
-    deliveryDate: {},
+    paymentIntent: {},
   },
   { timestamps: true }
 );

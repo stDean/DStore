@@ -27,16 +27,20 @@ const BrandRouter = require("./routes/brand.route");
 const CouponRouter = require("./routes/coupon.route");
 const CartRouter = require("./routes/cart.route");
 const OrderRouter = require("./routes/order.route");
+const ColorRouter = require("./routes/color.route");
+const EnquiryRouter = require("./routes/enquiry.route");
 
 const AUTH_MIDDLEWARE = require("./middleware/auth.middleware");
 
 app.use("/api/auth", AuthRouter);
+app.use("/api/blog", BlogRouter);
+app.use("/api/product", ProductRouter);
+app.use("/api/product-category", ProductCategoryRouter);
+app.use("/api/blog-category", BlogCategoryRouter);
+app.use("/api/brand", BrandRouter);
+app.use("/api/color", ColorRouter);
+app.use("/api/enquiry", EnquiryRouter);
 app.use("/api", AUTH_MIDDLEWARE, UserRouter);
-app.use("/api/product", AUTH_MIDDLEWARE, ProductRouter);
-app.use("/api/blog", AUTH_MIDDLEWARE, BlogRouter);
-app.use("/api/product-category", AUTH_MIDDLEWARE, ProductCategoryRouter);
-app.use("/api/blog-category", AUTH_MIDDLEWARE, BlogCategoryRouter);
-app.use("/api/brand", AUTH_MIDDLEWARE, BrandRouter);
 app.use("/api/coupon", AUTH_MIDDLEWARE, CouponRouter);
 app.use("/api/cart", AUTH_MIDDLEWARE, CartRouter);
 app.use("/api/order", AUTH_MIDDLEWARE, OrderRouter);

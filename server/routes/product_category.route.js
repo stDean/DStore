@@ -11,15 +11,16 @@ const {
 } = ProductCategoryCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
+const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
 
 router
   .route("/")
   .get(getProductCategories)
-  .post(ADMIN_MIDDLEWARE, createProductCategory);
+  .post([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], createProductCategory);
 router
   .route("/:id")
   .get(getProductCategory)
-  .patch(ADMIN_MIDDLEWARE, updateProductCategory)
-  .delete(ADMIN_MIDDLEWARE, deleteProductCategory);
+  .patch([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], updateProductCategory)
+  .delete([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], deleteProductCategory);
 
 module.exports = router;

@@ -12,9 +12,33 @@ const CloudinaryImageUpload = (fileToUpload, folder) => {
     cloudinary.v2.uploader
       .upload(fileToUpload, { folder: `ecom/${folder}` })
       .then(result => {
-        resolve({ url: result.secure_url }, { resource_type: "auto" });
+        resolve(
+          {
+            url: result.secure_url,
+            asset_id: result.asset_id,
+            public_id: result.public_id,
+          },
+          { resource_type: "auto" }
+        );
       });
   });
 };
 
-module.exports = CloudinaryImageUpload;
+const CloudinaryDeleteImage = (fileToDelete, folder) => {
+  return new Promise(resolve => {
+    cloudinary.v2.uploader
+      .destroy(fileToDelete, { folder: `ecom/${folder}` })
+      .then(result => {
+        resolve(
+          {
+            url: result.secure_url,
+            asset_id: result.asset_id,
+            public_id: result.public_id,
+          },
+          { resource_type: "auto" }
+        );
+      });
+  });
+};
+
+module.exports = { CloudinaryImageUpload, CloudinaryDeleteImage };

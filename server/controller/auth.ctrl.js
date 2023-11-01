@@ -50,7 +50,7 @@ const AuthCtrl = {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
     });
 
-    res.status(StatusCodes.OK).json(user);
+    res.status(StatusCodes.OK).json({ user, token: user.createJWT() });
   },
   adminLogin: async (req, res) => {
     const { email, password: enteredPassword } = req.body;
@@ -79,7 +79,9 @@ const AuthCtrl = {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
     });
 
-    res.status(StatusCodes.OK).json(findAdmin);
+    res
+      .status(StatusCodes.OK)
+      .json({ findAdmin, token: findAdmin.createJWT() });
   },
   getAccessToken: async (req, res) => {
     const rf_token = req.cookies.refreshToken;

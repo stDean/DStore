@@ -15,7 +15,7 @@ const BrandCtrl = {
     const { id } = req.params;
     const brand = await Brand.findById(id);
     if (!brand) {
-      throw new NotFoundError("Product not found");
+      throw new NotFoundError("Brand not found");
     }
 
     res.status(StatusCodes.OK).json(brand);
@@ -28,7 +28,7 @@ const BrandCtrl = {
       { new: true, runValidators: true }
     );
     if (!brand) {
-      throw new NotFoundError("Product not found");
+      throw new NotFoundError("Brand not found");
     }
 
     res.status(StatusCodes.OK).json(brand);
@@ -37,7 +37,7 @@ const BrandCtrl = {
     const { id } = req.params;
     const brand = await Brand.findByIdAndDelete(id);
     if (!brand) {
-      throw new NotFoundError("Product not found");
+      throw new NotFoundError("Brand not found");
     }
 
     res.status(StatusCodes.OK).json({ msg: "Deleted Successfully" });

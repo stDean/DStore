@@ -11,15 +11,16 @@ const {
 } = BlogCategoryCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
+const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
 
 router
   .route("/")
   .get(getBlogCategories)
-  .post(ADMIN_MIDDLEWARE, createBlogCategory);
+  .post([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], createBlogCategory);
 router
   .route("/:id")
   .get(getBlogCategory)
-  .patch(ADMIN_MIDDLEWARE, updateBlogCategory)
-  .delete(ADMIN_MIDDLEWARE, deleteBlogCategory);
+  .patch([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], updateBlogCategory)
+  .delete([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], deleteBlogCategory);
 
 module.exports = router;

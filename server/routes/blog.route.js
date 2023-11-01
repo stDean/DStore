@@ -14,18 +14,23 @@ const {
 } = BlogCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
+const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
 
 const {
   uploadImg,
   blogImageResize,
 } = require("../middleware/image-upload.middleware");
 
-router.route("/").get(getBlogs).post(ADMIN_MIDDLEWARE, createBlog);
-router.patch("/like", likeBlog);
-router.patch("/dislike", dislikeBlog);
+router
+  .route("/")
+  .get(getBlogs)
+  .post([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], createBlog);
+  
+router.patch("/like", AUTH_MIDDLEWARE, likeBlog);
+router.patch("/dislike", AUTH_MIDDLEWARE, dislikeBlog);
 router.patch(
   "/upload/:id",
-  ADMIN_MIDDLEWARE,
+  [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],
   uploadImg.array("images", 10),
   blogImageResize,
   uploadBlogImages
@@ -33,7 +38,7 @@ router.patch(
 router
   .route("/:id")
   .get(getBlog)
-  .patch(ADMIN_MIDDLEWARE, updateBlog)
-  .delete(ADMIN_MIDDLEWARE, deleteBlog);
+  .patch([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], updateBlog)
+  .delete([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], deleteBlog);
 
 module.exports = router;

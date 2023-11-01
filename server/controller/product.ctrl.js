@@ -2,7 +2,10 @@ const { NotFoundError, BadRequestError } = require("../errors");
 const Product = require("../model/product.schema");
 const { StatusCodes } = require("http-status-codes");
 const slugify = require("slugify");
-const CloudinaryImageUpload = require("../utils/cloudinary");
+const {
+  CloudinaryImageUpload,
+  CloudinaryDeleteImage,
+} = require("../utils/cloudinary");
 const fs = require("fs");
 
 const ProductCtrl = {
@@ -154,9 +157,6 @@ const ProductCtrl = {
     return res.status(StatusCodes.OK).json(finalProduct);
   },
   uploadProductImages: async (req, res) => {
-    const { id } = req.params;
-
-    // update the image
     const uploader = path => CloudinaryImageUpload(path, "product");
     const urls = [];
     const files = req.files;
@@ -167,16 +167,17 @@ const ProductCtrl = {
 
       fs.unlinkSync(path);
     }
-    const product = await Product.findByIdAndUpdate(
-      id,
-      { images: urls.map(file => file) },
-      { new: true, runValidators: true }
-    );
-    if (!product) {
-      throw new NotFoundError("Product not found");
-    }
 
-    res.status(StatusCodes.OK).json(product);
+    const images = urls.map(file => file);
+    res.status(StatusCodes.OK).json(images);
+  },
+  deleteProductImages: async (req, res) => {
+    const { id } = req.params;
+    const deleted = await CloudinaryDeleteImage(
+      `ecom/product/${id}`,
+      "product"
+    );
+    res.status(StatusCodes.OK).json({ msg: "Deleted" });
   },
 };
 

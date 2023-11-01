@@ -13,11 +13,16 @@ const {
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 
-router.route("/").post(ADMIN_MIDDLEWARE, createCoupon).get(getCoupons);
+router
+  .route("/")
+  .post(ADMIN_MIDDLEWARE, createCoupon)
+  .get(ADMIN_MIDDLEWARE, getCoupons);
+
 router.post("/apply", applyCoupon);
+
 router
   .route("/:id")
-  .get(getCoupon)
+  .get(ADMIN_MIDDLEWARE, getCoupon)
   .patch(ADMIN_MIDDLEWARE, updateCoupon)
   .delete(ADMIN_MIDDLEWARE, deleteCoupon);
 

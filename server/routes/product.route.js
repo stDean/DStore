@@ -10,28 +10,38 @@ const {
   deleteProduct,
   rateProduct,
   uploadProductImages,
+  deleteProductImages,
 } = ProductCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
+const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
 
 const {
   uploadImg,
   productImageResize,
 } = require("../middleware/image-upload.middleware");
 
-router.route("/").get(getProducts).post(ADMIN_MIDDLEWARE, createProduct);
+router
+  .route("/")
+  .get(getProducts)
+  .post([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], createProduct);
 router.patch("/rate", rateProduct);
-router.patch(
-  "/upload/:id",
-  ADMIN_MIDDLEWARE,
+router.post(
+  "/upload",
+  [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],
   uploadImg.array("images", 10),
   productImageResize,
   uploadProductImages
 );
+router.delete(
+  "/delete-image/:id",
+  [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],
+  deleteProductImages
+);
 router
   .route("/:id")
   .get(getProduct)
-  .patch(ADMIN_MIDDLEWARE, updateProduct)
-  .delete(ADMIN_MIDDLEWARE, deleteProduct);
+  .patch([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], updateProduct)
+  .delete([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], deleteProduct);
 
 module.exports = router;

@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+:root {
+  --color-131921: #131921;
+  --color-3b4149: #3b4149;
+  --color-febd69: #febd69;
+  --color-232f3e: #232f3e;
+}
+
 body {
   font-family: 'Rubik', sans-serif;
 }
@@ -13,4 +20,38 @@ body {
 a {
   text-decoration: none;
   display: inline-block
+}
+
+/* Header Part */
+header {
+  background-color: var(--color-131921);
+}
+
+.header-top-strip {
+  border-bottom: 1px solid var(--color-3b4149);
+}
+
+.header-upper .upper-text {
+  background-color: var(--color-febd69);
+}
+
+.header-upper-links img {
+  width: 35px;
+  height: 35px;
+}
+
+.header-bottom {
+  background-color: var(--color-232f3e)
+}
+
+.menu-links {
+  color: white;
+  letter-spacing: .3;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.dropdown__menu {
+  background-color: var(--color-131921);
 }

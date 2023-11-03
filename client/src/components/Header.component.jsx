@@ -6,7 +6,7 @@ const Header = () => {
   const [menu, setMenu] = useState(false);
 
   return (
-    <header className="container">
+    <header className="w-full">
       <div className="flex items-center justify-between py-2 max-w-7xl mx-auto">
         <div>
           <p className="text-white mb-0 text-xs">
@@ -52,7 +52,7 @@ const Header = () => {
             <div>
               <Link to="">
                 <div className="flex gap-2 items-center">
-                  <img src="images/compare.svg" alt="" />
+                  <img src="images/compare.svg" alt="compare" />
                   <p className="text-white text-sm">
                     Compare <br /> Products
                   </p>
@@ -62,7 +62,7 @@ const Header = () => {
             <div>
               <Link to="">
                 <div className="flex gap-2 items-center">
-                  <img src="images/wishlist.svg" alt="" />
+                  <img src="images/wishlist.svg" alt="wishlist" />
                   <p className="text-white text-sm">
                     Favorite <br /> Wishlists
                   </p>
@@ -72,7 +72,7 @@ const Header = () => {
             <div>
               <Link to="">
                 <div className="flex gap-2 items-center">
-                  <img src="images/user.svg" alt="" />
+                  <img src="images/user.svg" alt="user" />
                   <p className="text-white text-sm">
                     Log In <br /> My Account
                   </p>
@@ -81,7 +81,7 @@ const Header = () => {
             </div>
             <div>
               <Link to="" className="flex gap-3 items-center">
-                <img src="images/cart.svg" alt="" />
+                <img src="images/cart.svg" alt="cart" />
                 <div className="text-center ">
                   <span className="bg-white px-2 text-black text-xs rounded -mb-1">
                     0
@@ -108,7 +108,7 @@ const Header = () => {
               >
                 <img
                   src="images/menu.svg"
-                  alt=""
+                  alt="menu"
                   width={25}
                   height={25}
                   className="mr-2"

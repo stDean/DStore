@@ -116,3 +116,14 @@ export const miniShop = [
     subtitle: "100% protected payment",
   },
 ];
+
+export const brand = [
+  "images/brand-03.png",
+  "images/brand-01.png",
+  "images/brand-05.png",
+  "images/brand-08.png",
+  "images/brand-04.png",
+  "images/brand-06.png",
+  "images/brand-07.png",
+  "images/brand-02.png",
+];

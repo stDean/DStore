@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "./ui/Button";
 
 const Banner = ({
   title,
@@ -27,11 +28,7 @@ const Banner = ({
         <p className={`text-sm ${small && "text-xs"}`}>
           {amtText} <br /> {moText}
         </p>
-        {button && (
-          <button className="py-2 px-5 rounded-3xl bg-[#232f3e] text-xs text-white mt-8">
-            BUY NOW
-          </button>
-        )}
+        {button && <Button text="BUY NOW" />}
       </div>
     </div>
   );

@@ -98,19 +98,33 @@ footer {
 .grid__item:nth-child(4) {
   border-right: none;
 }
+
 .grid__item:nth-child(5) {
   border-bottom: none;
 }
+
 .grid__item:nth-child(6) {
   border-bottom: none;
 }
+
 .grid__item:nth-child(7) {
   border-bottom: none;
 }
+
 .grid__item:nth-child(8) {
   border: none;
 }
 
 .grid__item img {
   width: 40%;
+}
+
+.section_marquee:nth-last-child(1) {
+  margin-right: 32px;
+}
+
+.background_img {
+  background-image: url('/public/images/speck.jpg');
+  background-size: cover;
+  background-position: center center;
 }

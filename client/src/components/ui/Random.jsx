@@ -2,7 +2,7 @@ import ReactStars from "react-rating-stars-component";
 
 export const Random = ({ imgPath, title, price }) => {
   return (
-    <div className="flex items-center gap-4 border-b last:border-none py-5 first:pt-0">
+    <div className="flex items-center gap-4 border-b last:border-none py-5 first:pt-0 last:pb-0">
       <img src={imgPath} alt="" width={80} />
 
       <div>

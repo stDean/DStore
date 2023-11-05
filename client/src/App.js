@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import { Layout } from "./components";
-import { AboutPage, HomePage, ContactPage, StorePage } from "./pages";
+import { AboutPage, HomePage, ContactPage, StorePage, BlogPage } from "./pages";
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="store" element={<StorePage />} />
+          <Route path="blog" element={<BlogPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

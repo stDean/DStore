@@ -1,9 +1,15 @@
 import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
 
-const Collection = () => {
+const Collection = ({ layout }) => {
   return (
-    <Link className="col-span-2 group p-4 relative bg-white rounded-lg shadow-lg overflow-hidden">
+    <Link
+      className={`${
+        layout ? layout : "col-span-2"
+      } group p-4 relative bg-white rounded-lg shadow-lg overflow-hidden ${
+        layout === "col-span-10" ? "flex" : ""
+      }`}
+    >
       <img
         src="images/wishlist.svg"
         alt=""
@@ -11,8 +17,22 @@ const Collection = () => {
         className="absolute top-3 right-3 z-10 invert"
       />
 
-      <div className="flex flex-col item-center">
-        <div className="w-full bg-green-200 group/edit">
+      <div
+        className={`flex item-center ${
+          layout === "col-span-10" || layout === "col-span-5"
+            ? "flex-row"
+            : "flex-col"
+        }`}
+      >
+        <div
+          className={`bg-green-200 group/edit ${
+            layout === "col-span-10"
+              ? "w-1/3"
+              : layout === "col-span-5"
+              ? "w-1/2"
+              : "w-full"
+          }`}
+        >
           <img
             src="images/tab.jpg"
             alt=""
@@ -25,20 +45,38 @@ const Collection = () => {
           />
         </div>
 
-        <div className="space-y-3 mt-3">
+        <div
+          className={`mt-3 ${
+            layout === "col-span-10" ? "space-y-1" : "space-y-3"
+          }`}
+        >
           <p className="text-xs font-semibold" style={{ color: "#bf4800" }}>
             Havilis
           </p>
-          <h1 className="font-semibold text-xs">
-            Milanese Loop Watch Band For 42mm/44mm Apple...
+          <h1
+            className={`font-semibold ${
+              layout === "col-span-10" ? "text-sm" : "text-xs"
+            }`}
+          >
+            Milanese Loop Watch Band For 42mm/44mm Apple
           </h1>
           <ReactStars
             count={5}
             value="3"
             edit={false}
             activeColor="#ffd700"
-            size={24}
+            size={20}
           />
+
+          {layout === "col-span-10" && (
+            <p className="text-xs pb-4 text-gray-500">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+              quia incidunt itaque laudantium aliquid reprehenderit! Ex
+              perferendis, aperiam itaque suscipit inventore qui nam quod, id a
+              odio ullam nisi aliquid!
+            </p>
+          )}
+
           <p className="text-sm font-semibold text-blue-300">$100.00</p>
         </div>
       </div>

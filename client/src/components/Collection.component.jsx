@@ -39,7 +39,7 @@ const Collection = () => {
             activeColor="#ffd700"
             size={24}
           />
-          <p className="text-sm font-medium text-blue-300">$100.00</p>
+          <p className="text-sm font-semibold text-blue-300">$100.00</p>
         </div>
       </div>
 

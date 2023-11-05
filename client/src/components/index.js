@@ -6,3 +6,8 @@ export { default as BlogCard } from "./BlogCard.component";
 export { default as Collection } from "./Collection.component";
 export { default as SpecialProducts } from "./SpecialProducts.component";
 export { default as PopularProducts } from "./PopularProducts.component";
+export { default as Products } from "./Products.component";
+export { default as BreadCrumb } from "./BreadCrumb.component";
+export { default as Meta } from "./Meta.component";
+export { default as SideBar } from "./SideBar.component";
+export { default as MainStore } from "./Store.component";

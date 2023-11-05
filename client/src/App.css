@@ -128,3 +128,9 @@ footer {
   background-size: cover;
   background-position: center center;
 }
+
+.add__bg {
+  background-image: url('/public/images/smwt.jpg');
+  background-size: cover;
+  background-position: center center;
+}

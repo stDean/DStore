@@ -4,8 +4,10 @@ import {
   BlogCard,
   Collection,
   Hero,
+  Meta,
   MiniShop,
   PopularProducts,
+  Products,
   SpecialProducts,
 } from "../components";
 import { bannerItem, hero, miniShop, brand } from "../utils/data";
@@ -14,6 +16,7 @@ import Marquee from "react-fast-marquee";
 const Home = () => {
   return (
     <>
+      <Meta title="Home" />
       {/* Banner */}
       <section className="home-wrapper py-8 w-full">
         <div className="max-w-7xl mx-auto grid grid-rows-2 grid-cols-4 gap-5">
@@ -73,6 +76,19 @@ const Home = () => {
             <Collection />
             <Collection />
             <Collection />
+          </div>
+
+          <div className="grid grid-cols-12 gap-3 mt-10">
+            <Products bg />
+            <Products>
+              <img src="images/laptop.jpg" alt="" className="w-full" />
+            </Products>
+            <Products>
+              <img src="images/tab1.jpg" alt="" className="w-full" />
+            </Products>
+            <Products>
+              <img src="images/speaker.jpg" alt="" className="w-full" />
+            </Products>
           </div>
 
           {/* Special Collection */}

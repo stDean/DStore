@@ -1,5 +1,5 @@
 import ReactStars from "react-rating-stars-component";
-import { Button } from "./ui/Button";
+import { ButtonLink } from "./ui/ButtonLink";
 import { Link } from "react-router-dom";
 
 const SpecialProducts = () => {
@@ -69,7 +69,7 @@ const SpecialProducts = () => {
             ></div>
           </div>
         </div>
-        <Button text="ADD TO CART" />
+        <ButtonLink text="ADD TO CART" />
       </div>
     </div>
   );

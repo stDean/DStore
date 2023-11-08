@@ -50,38 +50,51 @@ const Header = () => {
         <div className="text-white flex-1">
           <div className="header-upper-links flex items-center justify-between">
             <div>
-              <Link to="">
+              <Link to="/compare">
                 <div className="flex gap-2 items-center">
-                  <img src="images/compare.svg" alt="compare" />
+                  <img src="/images/compare.svg" alt="compare" />
                   <p className="text-white text-sm">
                     Compare <br /> Products
                   </p>
-                </div>
+                </div>ButtonLink
               </Link>
             </div>
             <div>
-              <Link to="">
+              <Link to="/wishlist">
                 <div className="flex gap-2 items-center">
-                  <img src="images/wishlist.svg" alt="wishlist" />
+                  <img src="/images/wishlist.svg" alt="wishlist" />
                   <p className="text-white text-sm">
                     Favorite <br /> Wishlists
                   </p>
                 </div>
               </Link>
             </div>
-            <div>
-              <Link to="">
-                <div className="flex gap-2 items-center">
-                  <img src="images/user.svg" alt="user" />
-                  <p className="text-white text-sm">
-                    Log In <br /> My Account
-                  </p>
-                </div>
-              </Link>
+            <div className="group relative">
+              <div className="flex gap-2 items-center">
+                <img src="/images/user.svg" alt="user" />
+                <p className="text-white text-sm">
+                  Log In <br /> My Account
+                </p>
+              </div>
+
+              <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
+                <Link
+                  to="/login"
+                  className="border-b border-blue-300 w-full pb-2"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="pt-2"
+                >
+                  Register
+                </Link>
+              </div>
             </div>
             <div>
-              <Link to="" className="flex gap-3 items-center">
-                <img src="images/cart.svg" alt="cart" />
+              <Link to="/cart" className="flex gap-3 items-center">
+                <img src="/images/cart.svg" alt="cart" />
                 <div className="text-center ">
                   <span className="bg-white px-2 text-black text-xs rounded -mb-1">
                     0
@@ -107,7 +120,7 @@ const Header = () => {
                 onClick={() => setMenu(menu => !menu)}
               >
                 <img
-                  src="images/menu.svg"
+                  src="/images/menu.svg"
                   alt="menu"
                   width={25}
                   height={25}
@@ -190,7 +203,7 @@ const Header = () => {
             <NavLink to="/store" className="">
               OUR STORE
             </NavLink>
-            <NavLink to="/blog" className="">
+            <NavLink to="/blogs" className="">
               BLOG
             </NavLink>
             <NavLink to="/contact" className="">

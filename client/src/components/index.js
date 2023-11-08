@@ -11,3 +11,8 @@ export { default as BreadCrumb } from "./BreadCrumb.component";
 export { default as Meta } from "./Meta.component";
 export { default as SideBar } from "./SideBar.component";
 export { default as MainStore } from "./Store.component";
+export { default as CompareCard } from "./CompareCard.component";
+export { default as WishlistCard } from "./WishlistCard.component";
+export { default as Input } from "./Input.component";
+export { default as CategoryFilter } from "./CategoryFilter.component";
+export { default as Review } from "./Review.component";

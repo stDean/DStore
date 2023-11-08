@@ -3,6 +3,7 @@ import { CheckText } from "./ui/CheckText";
 import { Color } from "./ui/Color";
 import { Tags } from "./ui/Tags";
 import { Random } from "./ui/Random";
+import CategoryFilter from "./CategoryFilter.component";
 
 const data = ["S", "M", "L", "XL", "XXL"];
 const tags = [
@@ -33,15 +34,7 @@ const random = [
 const SideBar = () => {
   return (
     <div className="col-span-3 space-y-4 overflow-hidden">
-      <div className="bg-white rounded-lg shadow-lg p-4 space-y-6">
-        <h1 className="font-semibold text-sm">Shop By Category</h1>
-        <div className="space-y-2">
-          <p className="text-xs">Phones</p>
-          <p className="text-xs">Laptops</p>
-          <p className="text-xs">Watches</p>
-          <p className="text-xs">Tablets</p>
-        </div>
-      </div>
+      <CategoryFilter />
 
       <div className="bg-white rounded-lg shadow-lg p-4 space-y-6">
         <h1 className="font-semibold text-sm">Filter By</h1>

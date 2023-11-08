@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "./ui/Button";
+import { ButtonLink } from "./ui/ButtonLink";
 
 const Banner = ({
   title,
@@ -28,7 +28,7 @@ const Banner = ({
         <p className={`text-sm ${small && "text-xs"}`}>
           {amtText} <br /> {moText}
         </p>
-        {button && <Button text="BUY NOW" />}
+        {button && <ButtonLink text="BUY NOW" />}
       </div>
     </div>
   );

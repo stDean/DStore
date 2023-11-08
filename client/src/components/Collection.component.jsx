@@ -1,9 +1,10 @@
-import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
+import Stars from "./ui/Stars";
 
 const Collection = ({ layout }) => {
   return (
     <Link
+      to="/store/:id"
       className={`${
         layout ? layout : "col-span-2"
       } group p-4 relative bg-white rounded-lg shadow-lg overflow-hidden ${
@@ -11,7 +12,7 @@ const Collection = ({ layout }) => {
       }`}
     >
       <img
-        src="images/wishlist.svg"
+        src="/images/wishlist.svg"
         alt=""
         width={15}
         className="absolute top-3 right-3 z-10 invert"
@@ -34,12 +35,12 @@ const Collection = ({ layout }) => {
           }`}
         >
           <img
-            src="images/tab.jpg"
+            src="/images/tab.jpg"
             alt=""
             className="group-hover/edit:hidden"
           />
           <img
-            src="images/tab1.jpg"
+            src="/images/tab1.jpg"
             alt=""
             className="hidden group-hover/edit:block"
           />
@@ -60,13 +61,7 @@ const Collection = ({ layout }) => {
           >
             Milanese Loop Watch Band For 42mm/44mm Apple
           </h1>
-          <ReactStars
-            count={5}
-            value="3"
-            edit={false}
-            activeColor="#ffd700"
-            size={20}
-          />
+          <Stars size={20} />
 
           {layout === "col-span-10" && (
             <p className="text-xs pb-4 text-gray-500">
@@ -83,13 +78,13 @@ const Collection = ({ layout }) => {
 
       <div className="absolute flex flex-col top-10 group-hover:right-3 space-y-3 -right-20 duration-500">
         <Link>
-          <img src="images/prodcompare.svg" alt="" width={15} />
+          <img src="/images/prodcompare.svg" alt="" width={15} />
         </Link>
         <Link>
-          <img src="images/view.svg" alt="" width={15} />
+          <img src="/images/view.svg" alt="" width={15} />
         </Link>
         <Link>
-          <img src="images/add-cart.svg" alt="" width={15} />
+          <img src="/images/add-cart.svg" alt="" width={15} />
         </Link>
       </div>
     </Link>

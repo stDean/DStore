@@ -73,10 +73,16 @@ const Footer = () => {
 
           <div className="flex flex-col justify-around gap-4 col-span-2">
             <h2 className="font-semibold mb-2">Information</h2>
-            <Link className="text-xs hover:font-semibold">Privacy Policy</Link>
-            <Link className="text-xs hover:font-semibold">Refund Policy</Link>
-            <Link className="text-xs hover:font-semibold">Shipping Policy</Link>
-            <Link className="text-xs hover:font-semibold">
+            <Link to="/privacy" className="text-xs hover:font-semibold">
+              Privacy Policy
+            </Link>
+            <Link to="/refund" className="text-xs hover:font-semibold">
+              Refund Policy
+            </Link>
+            <Link to="/shipping" className="text-xs hover:font-semibold">
+              Shipping Policy
+            </Link>
+            <Link to="/terms&condition" className="text-xs hover:font-semibold">
               Terms Of Service
             </Link>
             <Link className="text-xs hover:font-semibold">Blogs</Link>

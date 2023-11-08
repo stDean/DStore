@@ -1,4 +1,4 @@
-import { Button } from "./ui/Button";
+import { ButtonLink } from "./ui/ButtonLink";
 
 const BlogCard = () => {
   return (
@@ -17,7 +17,7 @@ const BlogCard = () => {
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. is more text
           vel explicabo...
         </p>
-        <Button text="READ MORE" />
+        <ButtonLink to="/blog/:slug" text="READ MORE" />
       </div>
     </div>
   );

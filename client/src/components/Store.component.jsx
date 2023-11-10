@@ -37,12 +37,11 @@ const Store = () => {
           <div className="">
             <select
               id="countries"
+              defaultValue="feature"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg block w-full p-2 mr-10"
             >
               <option value="feature">Featured</option>
-              <option value="best-seller" selected>
-                Best Seller
-              </option>
+              <option value="best-seller">Best Seller</option>
               <option value="CA">Canada</option>
               <option value="FR">France</option>
               <option value="DE">Germany</option>

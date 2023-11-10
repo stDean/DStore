@@ -3,8 +3,7 @@ import Stars from "./ui/Stars";
 
 const Collection = ({ layout }) => {
   return (
-    <Link
-      to="/store/:id"
+    <div
       className={`${
         layout ? layout : "col-span-2"
       } group p-4 relative bg-white rounded-lg shadow-lg overflow-hidden ${
@@ -54,13 +53,14 @@ const Collection = ({ layout }) => {
           <p className="text-xs font-semibold" style={{ color: "#bf4800" }}>
             Havilis
           </p>
-          <h1
+          <Link
+            to="/store/:id"
             className={`font-semibold ${
               layout === "col-span-10" ? "text-sm" : "text-xs"
             }`}
           >
             Milanese Loop Watch Band For 42mm/44mm Apple
-          </h1>
+          </Link>
           <Stars size={20} />
 
           {layout === "col-span-10" && (
@@ -87,7 +87,7 @@ const Collection = ({ layout }) => {
           <img src="/images/add-cart.svg" alt="" width={15} />
         </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 

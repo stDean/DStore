@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="w-full text-white">
       <div className="footer-upper max-w-5xl mx-auto flex items-center justify-between py-10">
         <div className="font-semibold tracking-wide flex items-center space-x-3">
-          <img src="images/newsletter.png" alt="newsletter" />
+          <img src="/images/newsletter.png" alt="newsletter" />
           <p>Sign Up For Newsletter</p>
         </div>
 

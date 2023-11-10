@@ -5,7 +5,7 @@ const BlogCard = () => {
     <div className="col-span-3 rounded-lg shadow-lg overflow-hidden">
       <div className="overflow-hidden">
         <img
-          src="images/blog-1.jpg"
+          src="/images/blog-1.jpg"
           alt=""
           className="w-full hover:scale-105 hover:duration-1000"
         />

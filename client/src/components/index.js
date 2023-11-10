@@ -16,3 +16,7 @@ export { default as WishlistCard } from "./WishlistCard.component";
 export { default as Input } from "./Input.component";
 export { default as CategoryFilter } from "./CategoryFilter.component";
 export { default as Review } from "./Review.component";
+export { default as Accordion } from "./Accordion.component";
+export { default as QuantityBtn } from "./QuantityBtn.component";
+export { default as CartCard } from "./CartCard.component";
+export { default as CheckoutCart } from "./CheckoutCart.component";

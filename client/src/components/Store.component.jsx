@@ -3,22 +3,22 @@ import Collection from "./Collection.component";
 
 const images = [
   {
-    imgPath: "images/gr4.svg",
+    imgPath: "/images/gr4.svg",
     width: 12,
     layout: "col-span-2",
   },
   {
-    imgPath: "images/gr3.svg",
+    imgPath: "/images/gr3.svg",
     width: 8,
     layout: "col-span-3",
   },
   {
-    imgPath: "images/gr2.svg",
+    imgPath: "/images/gr2.svg",
     width: 5,
     layout: "col-span-5",
   },
   {
-    imgPath: "images/gr.svg",
+    imgPath: "/images/gr.svg",
     width: 12,
     layout: "col-span-10",
   },

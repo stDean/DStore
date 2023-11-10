@@ -20,6 +20,8 @@ import {
   ShippingPolicyPage,
   RefundPolicyPage,
   PrivacyPolicyPage,
+  CartPage,
+  CheckoutPage,
 } from "./pages";
 
 function App() {
@@ -44,7 +46,9 @@ function App() {
           <Route path="refund" element={<RefundPolicyPage />} />
           <Route path="shipping" element={<ShippingPolicyPage />} />
           <Route path="terms&condition" element={<TnCPage />} />
+          <Route path="cart" element={<CartPage />} />
         </Route>
+          <Route path="checkout" element={<CheckoutPage />} />
       </Routes>
     </BrowserRouter>
   );

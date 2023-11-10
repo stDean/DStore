@@ -20,12 +20,12 @@ const tags = [
 
 const random = [
   {
-    imgPath: "images/headphone.jpg",
+    imgPath: "/images/headphone.jpg",
     title: "Kids Headphones Bulk 10 Pack Multi Colored For",
     price: "$100.00",
   },
   {
-    imgPath: "images/headphone.jpg",
+    imgPath: "/images/headphone.jpg",
     title: "Kids Headphones Bulk 10 Pack Multi Colored For",
     price: "$100.00",
   },

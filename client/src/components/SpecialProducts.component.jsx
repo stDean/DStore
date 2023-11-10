@@ -1,6 +1,6 @@
-import ReactStars from "react-rating-stars-component";
-import { ButtonLink } from "./ui/ButtonLink";
 import { Link } from "react-router-dom";
+import { ButtonLink } from "./ui/ButtonLink";
+import Stars from "./ui/Stars";
 
 const SpecialProducts = () => {
   return (
@@ -10,38 +10,33 @@ const SpecialProducts = () => {
           -10%
         </div>
         <img
-          src="images/wishlist.svg"
+          src="/images/wishlist.svg"
           alt=""
           width={15}
           className="absolute top-0 right-3 z-10 invert"
         />
-        <img src="images/tab.jpg" alt="" />
+        <img src="/images/tab.jpg" alt="" />
 
         {/* add swiper here */}
         <div className="flex overflow-hidden gap-2">
-          <img src="images/tab1.jpg" alt="" width={70} className="border" />
-          <img src="images/tab3.jpg" alt="" width={70} className="border" />
+          <img src="/images/tab1.jpg" alt="" width={70} className="border" />
+          <img src="/images/tab3.jpg" alt="" width={70} className="border" />
         </div>
 
         <div className="absolute flex flex-col top-6 group-hover:right-3 space-y-2 -right-20 duration-500">
           <Link>
-            <img src="images/prodcompare.svg" alt="" width={15} />
+            <img src="/images/prodcompare.svg" alt="" width={15} />
           </Link>
           <Link>
-            <img src="images/view.svg" alt="" width={15} />
+            <img src="/images/view.svg" alt="" width={15} />
           </Link>
         </div>
       </div>
       <div className="flex-1 mb-8 space-y-3">
         <p className="text-sm text-[#bf4800] font-semibold">Sony</p>
         <h1 className="font-semibold">Samsung Galaxy Tab A SM-T295, 4G</h1>
-        <ReactStars
-          count={5}
-          value="3"
-          edit={false}
-          activeColor="#ffd700"
-          size={20}
-        />
+
+        <Stars size={20} />
         <p className="font-semibold text-[#bf4800]">
           $16.00{" "}
           <span className="line-through text-gray-400 font-light">$25.00</span>

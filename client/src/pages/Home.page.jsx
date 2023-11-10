@@ -81,13 +81,13 @@ const Home = () => {
           <div className="grid grid-cols-12 gap-3 mt-10">
             <Products bg />
             <Products>
-              <img src="images/laptop.jpg" alt="" className="w-full" />
+              <img src="/images/laptop.jpg" alt="" className="w-full" />
             </Products>
             <Products>
-              <img src="images/tab1.jpg" alt="" className="w-full" />
+              <img src="/images/tab1.jpg" alt="" className="w-full" />
             </Products>
             <Products>
-              <img src="images/speaker.jpg" alt="" className="w-full" />
+              <img src="/images/speaker.jpg" alt="" className="w-full" />
             </Products>
           </div>
 

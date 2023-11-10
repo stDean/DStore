@@ -15,3 +15,5 @@ export { default as PrivacyPolicyPage } from "./PrivacyPolicy.page";
 export { default as RefundPolicyPage } from "./RefundPolicy.page";
 export { default as ShippingPolicyPage } from "./ShippingPolicy.page";
 export { default as TnCPage } from "./T&C.page";
+export { default as CartPage } from "./Cart.page";
+export { default as CheckoutPage } from "./Checkout.page";

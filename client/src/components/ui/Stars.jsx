@@ -4,7 +4,7 @@ const Stars = ({ size }) => {
   return (
     <ReactStars
       count={5}
-      value="4"
+      value={4}
       edit={false}
       activeColor="#ffd700"
       size={size}

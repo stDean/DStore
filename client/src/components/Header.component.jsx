@@ -56,7 +56,7 @@ const Header = () => {
                   <p className="text-white text-sm">
                     Compare <br /> Products
                   </p>
-                </div>ButtonLink
+                </div>
               </Link>
             </div>
             <div>

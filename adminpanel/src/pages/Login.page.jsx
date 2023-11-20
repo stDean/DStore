@@ -26,6 +26,12 @@ const Login = () => {
             name="password"
           />
 
+          <div className="text-xs text-gray-500 -mt-2 mb-2 hover:underline hover:underline-offset-2 hover:text-blue-500 float-right">
+            <Link to="/forget">Forget Password?</Link>
+          </div>
+
+          <div className="clear-both" />
+
           <Link
             to="/admin"
             className="border-0 px-3 py-2 font-bold w-full block text-center"

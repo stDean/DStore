@@ -123,19 +123,19 @@ const Dashboard = () => {
         <DashStatus
           title="Total Sales"
           percent="25"
-          smallText="Compares to April 2022"
+          smallText="Compared to April 2022"
           val="2500"
         />
         <DashStatus
           title="Total Sales"
           percent="35"
-          smallText="Compares to April 2022"
+          smallText="Compared to April 2022"
           val="2500"
         />
         <DashStatus
           title="Total Sales"
           percent="45"
-          smallText="Compares to April 2022"
+          smallText="Compared to April 2022"
           val="2500"
         />
 

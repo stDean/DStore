@@ -16,6 +16,13 @@ import {
   CategoryListPage,
   ColorListPage,
   CouponListPage,
+  AddBlogPage,
+  AddBlogCategoryPage,
+  AddColorPage,
+  AddCategoryPage,
+  AddBrandPage,
+  AddProductPage,
+  AddCouponPage,
 } from "./pages";
 
 function App() {
@@ -37,6 +44,13 @@ function App() {
           <Route path="list-category" element={<CategoryListPage />} />
           <Route path="list-color" element={<ColorListPage />} />
           <Route path="coupon-list" element={<CouponListPage />} />
+          <Route path="blog" element={<AddBlogPage />} />
+          <Route path="blog-category" element={<AddBlogCategoryPage />} />
+          <Route path="color" element={<AddColorPage />} />
+          <Route path="category" element={<AddCategoryPage />} />
+          <Route path="brand" element={<AddBrandPage />} />
+          <Route path="product" element={<AddProductPage />} />
+          <Route path="coupon" element={<AddCouponPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

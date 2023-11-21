@@ -7,7 +7,7 @@ const ResetPassword = () => {
       <div className="my-32 w-1/4 bg-white rounded-md mx-auto p-6">
         <div className="mb-6">
           <h1 className="text-3xl font-semibold mt-1">Reset Password</h1>
-          <p className="text-sm text-gray-500">Enter new password.</p>
+          <p className="text-sm text-gray-500 mt-1">Enter new password.</p>
         </div>
 
         <form action="">

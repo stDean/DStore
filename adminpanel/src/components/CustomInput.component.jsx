@@ -7,9 +7,10 @@ const CustomInput = ({ i_class, label, i_id, type, ...rest }) => {
         id={i_id}
         {...rest}
       />
+
       <label
         htmlFor={i_id}
-        className="text-sm absolute top-[18px] left-3 peer-focus:top-0 peer-focus:text-xs peer-focus:text-gray-500 peer-focus:pt-2"
+        className="text-sm absolute top-[18px] left-3 peer-focus:top-0 peer-focus:text-xs text-gray-500 peer-focus:pt-2"
       >
         {label}
       </label>

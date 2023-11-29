@@ -2,17 +2,17 @@ import { useEffect } from "react";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { useSelector, useDispatch } from "react-redux";
 
 import { CustomInput } from "../components";
-import { useLoginMutation } from "../app/api";
+import { loginUser } from "../features/auth/authSlice";
 
 const Login = () => {
-  const [login, { isLoading, isSuccess, error, data }] = useLoginMutation();
   const navigate = useNavigate();
-
-  if (isLoading) {
-    console.log("loading...");
-  }
+  const dispatch = useDispatch();
+  const { user, isSuccess, isLoading, isError, message } = useSelector(
+    ({ auth }) => auth
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -20,10 +20,7 @@ const Login = () => {
       password: "",
     },
     onSubmit: async values => {
-      const user = await login(values);
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user.data?.findAdmin));
-      }
+      dispatch(loginUser(values));
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -34,12 +31,10 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (data && isSuccess) {
+    if (user && isSuccess) {
       navigate("/admin");
-    } else if (error) {
-      alert(error?.data.msg);
     }
-  }, [isSuccess, data, error]);
+  }, [user, isSuccess, navigate]);
 
   return (
     <div className="py-5" style={{ background: "#ffd333", minHeight: "100vh" }}>
@@ -51,6 +46,14 @@ const Login = () => {
           </p>
         </div>
 
+        {isError && (
+          <p className="text-xs text-red-500">
+            {message === "Unauthorized access"
+              ? "You are not an admin"
+              : message}
+          </p>
+        )}
+
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
             type="email"
@@ -60,11 +63,11 @@ const Login = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
-          {formik.errors.email ? (
+          {/* {formik.errors.email ? (
             <div className="text-xs text-red-500 -mt-2">
               {formik.errors.email}
             </div>
-          ) : null}
+          ) : null} */}
 
           <CustomInput
             type="password"
@@ -74,11 +77,11 @@ const Login = () => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
-          {formik.errors.password ? (
+          {/* {formik.errors.password ? (
             <div className="text-xs text-red-500 -mt-2">
               {formik.errors.password}
             </div>
-          ) : null}
+          ) : null} */}
 
           <div className="text-xs text-gray-500 -mt-2 mb-2 hover:underline hover:underline-offset-2 hover:text-blue-500 float-right">
             <Link to="/forget">Forget Password?</Link>

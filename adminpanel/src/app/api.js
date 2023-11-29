@@ -13,7 +13,7 @@ export const adminApi = createApi({
           body,
         };
       },
-      providesTags: ["Login"],
+      invalidatesTags: ["Login"],
     }),
   }),
 });

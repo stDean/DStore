@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
 import { Table } from "antd";
-import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
+import { useEffect } from "react";
+import { AiFillDelete } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getAllOrders } from "../features/order/orderSlice";
 
 const columns = [
   {
@@ -31,20 +34,45 @@ const columns = [
   },
 ];
 
-const data1 = [];
-
-for (let i = 0; i < 40; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    amount: 300,
-    date: "12/12/2020",
-    action: "paid",
-  });
-}
-
 const Orders = () => {
+  const dispatch = useDispatch();
+  const {
+    orders: { allOrders },
+  } = useSelector(({ order }) => order);
+  const { user } = useSelector(({ auth }) => auth);
+
+  useEffect(() => {
+    dispatch(getAllOrders(user.token));
+  }, [dispatch]);
+
+  const data1 = [];
+
+  for (let i = 0; i < allOrders?.length; i++) {
+    data1.push({
+      key: i + 1,
+      name: `Edward King ${i}`,
+      product: allOrders[i]?.products.length,
+      amount: 300,
+      date: allOrders[i]?.createdAt,
+      action: (
+        <div className="flex gap-3 justify-center">
+          <Link
+            to="/"
+            className="text-[18px] text-green-500/60 hover:text-green-500"
+          >
+            <BiEdit />
+          </Link>
+          <Link
+            className="text-red-500/60 hover:text-red-500 text-[18px]"
+            to="/"
+          >
+            <AiFillDelete />
+          </Link>
+        </div>
+      ),
+    });
+  }
+
   return (
     <>
       <h1 className="mb-4 text-3xl font-semibold">Orders</h1>

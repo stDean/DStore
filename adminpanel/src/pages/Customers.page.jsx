@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Table } from "antd";
-import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../features/customer/customerSlice";
 
 const columns = [
   {
@@ -23,18 +23,27 @@ const columns = [
   },
 ];
 
-const data1 = [];
-
-for (let i = 0; i < 40; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    email: "test@test.com",
-    mobile: "+91 239 2345",
-  });
-}
-
 const Customers = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector(({ auth }) => auth);
+  const { customers } = useSelector(({ customer }) => customer);
+
+  useEffect(() => {
+    dispatch(getAllUsers(user.token));
+  }, [dispatch]);
+
+  const { users } = customers;
+  const data1 = [];
+
+  for (let i = 0; i < users?.length; i++) {
+    data1.push({
+      key: i + 1,
+      name: `${users[i]?.firstName} ${users[i]?.lastName}`,
+      email: users[i]?.email,
+      mobile: users[i]?.mobile,
+    });
+  }
+
   return (
     <>
       <h1 className="mb-4 text-3xl font-semibold">Customers</h1>

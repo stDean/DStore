@@ -3,6 +3,8 @@ import { Table } from "antd";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Products } from "../features/product/productSlice";
 
 const columns = [
   {
@@ -39,30 +41,44 @@ const columns = [
   },
 ];
 
-const data1 = [];
-
-for (let i = 0; i < 40; i++) {
-  data1.push({
-    key: i,
-    title: `Edward King ${i}`,
-    brand: "Apple",
-    category: "Tablets",
-    color: "space gray",
-    price: 1400,
-    action: (
-      <div className="flex gap-3 justify-center">
-        <Link to="/" className="text-[18px] text-green-500/60 hover:text-green-500">
-          <BiEdit />
-        </Link>
-        <Link className="text-red-500/60 hover:text-red-500 text-[18px]" to="/">
-          <AiFillDelete />
-        </Link>
-      </div>
-    ),
-  });
-}
-
 const ProductList = () => {
+  const dispatch = useDispatch();
+  const { products } = useSelector(({ product }) => product);
+
+  useEffect(() => {
+    dispatch(Products());
+  }, [dispatch]);
+
+  const data1 = [];
+  const { products: allProducts } = products;
+
+  for (let i = 0; i < allProducts?.length; i++) {
+    data1.push({
+      key: i + 1,
+      title: allProducts[i]?.title,
+      brand: allProducts[i]?.brand,
+      category: allProducts[i]?.category,
+      color: allProducts[i]?.color.join(", "),
+      price: allProducts[i]?.price,
+      action: (
+        <div className="flex gap-3 justify-center">
+          <Link
+            to="/"
+            className="text-[18px] text-green-500/60 hover:text-green-500"
+          >
+            <BiEdit />
+          </Link>
+          <Link
+            className="text-red-500/60 hover:text-red-500 text-[18px]"
+            to="/"
+          >
+            <AiFillDelete />
+          </Link>
+        </div>
+      ),
+    });
+  }
+
   return (
     <>
       <h1 className="mb-4 text-3xl font-semibold">Product List</h1>

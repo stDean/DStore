@@ -30,7 +30,7 @@ const Customers = () => {
 
   useEffect(() => {
     dispatch(getAllUsers(user.token));
-  }, [dispatch]);
+  }, [dispatch, user.token]);
 
   const { users } = customers;
   const data1 = [];

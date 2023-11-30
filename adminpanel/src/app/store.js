@@ -10,6 +10,7 @@ import blogCategorySlice from "../features/blogCat/blogCategorySlice";
 import blogSlice from "../features/blog/blogSlice";
 import couponSlice from "../features/coupon/couponSlice";
 import orderSlice from "../features/order/orderSlice";
+import enquirySlice from "../features/enquiry/enquirySlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     blogCategory: blogCategorySlice,
     blog: blogSlice,
     coupon: couponSlice,
-    order: orderSlice
+    order: orderSlice,
+    enquiry: enquirySlice
   },
 });

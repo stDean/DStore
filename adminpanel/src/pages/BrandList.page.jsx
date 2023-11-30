@@ -29,7 +29,7 @@ const BrandList = () => {
 
   useEffect(() => {
     dispatch(Brands(user.token));
-  }, [dispatch]);
+  }, [dispatch, user.token]);
 
   const data1 = [];
 

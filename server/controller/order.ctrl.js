@@ -58,7 +58,7 @@ const OrderCtrl = {
     res.status(StatusCodes.OK).json({ userOrders, nbHits: userOrders.length });
   },
   getAllOrders: async (req, res) => {
-    const allOrders = await Order.find({}).populate("products.product").exec();
+    const allOrders = await Order.find({}).populate("products.product").populate("orderBy").exec();
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
   },
   getUserOrder: async (req, res) => {

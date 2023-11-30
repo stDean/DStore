@@ -12,7 +12,7 @@ const columns = [
     dataIndex: "key",
   },
   {
-    title: "Name",
+    title: "Order By",
     dataIndex: "name",
   },
   {
@@ -20,7 +20,7 @@ const columns = [
     dataIndex: "product",
   },
   {
-    title: "Amount",
+    title: "Amount ($)",
     dataIndex: "amount",
   },
   {
@@ -43,17 +43,19 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(getAllOrders(user.token));
-  }, [dispatch]);
+  }, [dispatch, user.token]);
 
   const data1 = [];
 
   for (let i = 0; i < allOrders?.length; i++) {
     data1.push({
       key: i + 1,
-      name: `Edward King ${i}`,
-      product: allOrders[i]?.products.length,
-      amount: 300,
-      date: allOrders[i]?.createdAt,
+      name: `${allOrders[i]?.orderBy.firstName} ${allOrders[i]?.orderBy.lastName}`,
+      product: allOrders[i]?.products.map(product =>
+        product.product.title.split(" ").join(", ")
+      ),
+      amount: allOrders[i]?.paymentIntent.amount,
+      date: new Date(allOrders[i]?.createdAt).toLocaleString(),
       action: (
         <div className="flex gap-3 justify-center">
           <Link

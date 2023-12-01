@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getCoupons } from "./couponService";
+import { createCoupon, getCoupons } from "./couponService";
 
 const initialState = {
   coupons: [],
@@ -25,8 +25,24 @@ export const Coupons = createAsyncThunk(
   }
 );
 
+export const createCoupons = createAsyncThunk(
+  "coupon/create-coupon",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await createCoupon({ data, token });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const couponSlice = createSlice({
-  name: "customer",
+  name: "coupon",
   initialState,
   reducer: {},
   extraReducers: builder => {
@@ -41,6 +57,22 @@ export const couponSlice = createSlice({
         state.message = "success";
       })
       .addCase(Coupons.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.coupons = [];
+        state.message = payload;
+      })
+      .addCase(createCoupons.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(createCoupons.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.coupons = payload;
+        state.message = "created";
+      })
+      .addCase(createCoupons.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

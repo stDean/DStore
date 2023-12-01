@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.ant-select-selector {
+  padding: 5px !important;
+}

@@ -18,7 +18,7 @@ const columns = [
     sorter: (a, b) => a.name.length - b.name.length,
   },
   {
-    title: "Discount",
+    title: "Discount (%)",
     dataIndex: "discount",
     sorter: (a, b) => a.discount - b.discount,
   },
@@ -40,13 +40,13 @@ const CouponList = () => {
 
   useEffect(() => {
     dispatch(Coupons(user.token));
-  }, [dispatch]);
+  }, [dispatch, user.token]);
 
   const data1 = [];
 
   for (let i = 0; i < coupons?.length; i++) {
     data1.push({
-      key: i,
+      key: i + 1,
       name: coupons[i]?.name,
       discount: coupons[i]?.discount,
       expiry: coupons[i]?.expiry,

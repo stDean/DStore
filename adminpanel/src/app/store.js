@@ -11,6 +11,7 @@ import blogSlice from "../features/blog/blogSlice";
 import couponSlice from "../features/coupon/couponSlice";
 import orderSlice from "../features/order/orderSlice";
 import enquirySlice from "../features/enquiry/enquirySlice";
+import imageSlice from "../features/upload/uploadSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     blog: blogSlice,
     coupon: couponSlice,
     order: orderSlice,
-    enquiry: enquirySlice
+    enquiry: enquirySlice,
+    image: imageSlice
   },
 });

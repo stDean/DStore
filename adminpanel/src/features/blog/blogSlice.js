@@ -26,7 +26,7 @@ export const Blogs = createAsyncThunk(
 );
 
 export const blogsSlice = createSlice({
-  name: "customer",
+  name: "blog",
   initialState,
   reducer: {},
   extraReducers: builder => {

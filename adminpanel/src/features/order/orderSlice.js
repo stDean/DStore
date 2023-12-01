@@ -26,7 +26,7 @@ export const getAllOrders = createAsyncThunk(
 );
 
 export const orderSlice = createSlice({
-  name: "customer",
+  name: "order",
   initialState,
   reducer: {},
   extraReducers: builder => {

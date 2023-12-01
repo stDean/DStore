@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const ProductCtrl = require("../controller/product.ctrl");
+const UploadCtrl = require("../controller/uploadCtrl");
 const {
   createProduct,
   getProducts,
@@ -9,9 +10,8 @@ const {
   updateProduct,
   deleteProduct,
   rateProduct,
-  uploadProductImages,
-  deleteProductImages,
 } = ProductCtrl;
+const { uploadProductImages, deleteProductImages } = UploadCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getColors } from "./colorService";
+import { createColor, getColors } from "./colorService";
 
 const initialState = {
   colors: [],
@@ -25,8 +25,24 @@ export const Colors = createAsyncThunk(
   }
 );
 
+export const createColors = createAsyncThunk(
+  "color/create-color",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await createColor({ data, token });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const colorSlice = createSlice({
-  name: "customer",
+  name: "color",
   initialState,
   reducer: {},
   extraReducers: builder => {
@@ -41,6 +57,22 @@ export const colorSlice = createSlice({
         state.message = "success";
       })
       .addCase(Colors.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.colors = [];
+        state.message = payload;
+      })
+      .addCase(createColors.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(createColors.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.colors = payload;
+        state.message = "success";
+      })
+      .addCase(createColors.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

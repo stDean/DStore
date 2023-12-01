@@ -6,7 +6,7 @@ var blogCategorySchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "title cannot be empty"],
-      unique: [true, "category already exists"],
+      unique: [true, "vlog category already exists"],
       index: true,
     },
   },

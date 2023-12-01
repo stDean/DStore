@@ -19,7 +19,10 @@ import {
   // UserOutlined,
   // VideoCameraOutlined,
 } from "@ant-design/icons";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Layout, Menu, Button, theme } from "antd";
+
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
@@ -222,14 +225,10 @@ const MainLayout = () => {
                     tabindex="-1"
                   >
                     <li className="pl-5 -mb-8">
-                      <Link to="/admin">
-                        Dashboard
-                      </Link>
+                      <Link to="/admin">Dashboard</Link>
                     </li>
                     <li className="pl-5">
-                      <Link to="/signout">
-                        Sign Out
-                      </Link>
+                      <Link to="/signout">Sign Out</Link>
                     </li>
                   </ul>
                 )}
@@ -245,6 +244,18 @@ const MainLayout = () => {
             background: colorBgContainer,
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           <Outlet />
         </Content>
       </Layout>

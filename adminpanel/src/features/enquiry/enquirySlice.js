@@ -26,7 +26,7 @@ export const Enquires = createAsyncThunk(
 );
 
 export const enquireSlice = createSlice({
-  name: "customer",
+  name: "enquiry",
   initialState,
   reducer: {},
   extraReducers: builder => {

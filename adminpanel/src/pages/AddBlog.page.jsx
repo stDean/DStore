@@ -53,7 +53,7 @@ const AddBlog = () => {
           </Dragger>
 
           <div className="mt-4">
-            <CustomInput type="text" label="Enter Blog Title" name="title" />
+            <CustomInput m type="text" label="Enter Blog Title" name="title" />
           </div>
 
           <select

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
 
-export const getBrands = async token => {
-  const res = await axios.get(`${baseUrl}/brand`, {
+export const uploadImg = async ({ data, token }) => {
+  const res = await axios.post(`${baseUrl}/product/upload`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -10,8 +10,8 @@ export const getBrands = async token => {
   return res.data;
 };
 
-export const createBrand = async ({ data, token }) => {
-  const res = await axios.post(`${baseUrl}/brand`, data, {
+export const deleteImg = async ({ token, id }) => {
+  const res = await axios.delete(`${baseUrl}/product/delete-image/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

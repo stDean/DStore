@@ -10,7 +10,7 @@ import { loginUser } from "../features/auth/authSlice";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isSuccess, isLoading, isError, message } = useSelector(
+  const { user, isSuccess, isError, message } = useSelector(
     ({ auth }) => auth
   );
 
@@ -56,6 +56,7 @@ const Login = () => {
 
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
+            m
             type="email"
             label="Email Address"
             i_id="email"
@@ -70,6 +71,7 @@ const Login = () => {
           ) : null} */}
 
           <CustomInput
+            m
             type="password"
             label="Password"
             i_id="password"

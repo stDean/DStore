@@ -49,7 +49,7 @@ const CouponList = () => {
       key: i + 1,
       name: coupons[i]?.name,
       discount: coupons[i]?.discount,
-      expiry: coupons[i]?.expiry,
+      expiry: new Date(coupons[i]?.expiry).toLocaleString(),
       action: (
         <div className="flex gap-3 justify-center">
           <Link

@@ -1,32 +1,62 @@
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { Button, CustomInput } from "../components";
-import { createBrands } from "../features/brand/brandSlice";
+import { createBrands, Brand, brandEdit } from "../features/brand/brandSlice";
 
 const AddBrand = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
+  const [title, setTitle] = useState("");
   const { user } = useSelector(({ auth }) => auth);
-  const { isSuccess, isError } = useSelector(({ brand }) => brand);
+  const { isSuccess, isError, brands, message } = useSelector(
+    ({ brand }) => brand
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(Brand({ id }));
+      setTitle(brands.title);
+    } else {
+      setTitle("");
+    }
+  }, [dispatch, id, brands.title]);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      title: title,
     },
+    enableReinitialize: true,
     onSubmit: async values => {
-      dispatch(createBrands({ data: values, token: user.token }));
-      if (isSuccess) {
-        toast.success("Brand created successfully");
-        formik.resetForm();
-        setTimeout(() => {
-          navigate("/admin/list-brand");
-        }, 3000);
-      } else if (isError) {
-        toast.error("Something went wrong");
+      if (id) {
+        dispatch(brandEdit({ id, token: user.token, data: values }));
+
+        if (isSuccess && (message === "updated" || "single brand")) {
+          toast.success("Brand Updated");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-brand");
+          }, 3000);
+        } else if (isError) {
+          toast.error("Something went wrong");
+        }
+      } else {
+        dispatch(createBrands({ data: values, token: user.token }));
+
+        if (isSuccess && message === "success") {
+          toast.success("Brand created successfully");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-brand");
+          }, 3000);
+        } else if (isError) {
+          toast.error(message);
+        }
       }
     },
     validationSchema: Yup.object({
@@ -36,7 +66,9 @@ const AddBrand = () => {
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-semibold">Add Brand</h1>
+      <h1 className="mb-6 text-3xl font-semibold">
+        {id ? "Edit" : "Add"} Brand
+      </h1>
 
       <div className="max-w-5xl mx-auto shadow-md p-6">
         <form action="" onSubmit={formik.handleSubmit}>
@@ -57,7 +89,7 @@ const AddBrand = () => {
             </p>
           </div>
 
-          <Button title="Add Brand" />
+          <Button title={id ? "Edit Brand" : "Add Brand"} />
         </form>
       </div>
     </>

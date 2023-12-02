@@ -258,7 +258,6 @@ const AddProduct = () => {
           <div className="bg-white border p-10 text-center">
             <Dropzone
               onDrop={acceptedFiles => {
-                console.log(acceptedFiles);
                 dispatch(
                   imageUpload({ token: user.token, data: acceptedFiles })
                 );
@@ -268,7 +267,7 @@ const AddProduct = () => {
                 <section>
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <p>
+                    <p className="cursor-pointer">
                       Drag 'n' drop some files here, or click to select files
                     </p>
                   </div>

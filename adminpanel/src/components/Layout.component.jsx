@@ -35,7 +35,7 @@ const MainLayout = () => {
   } = theme.useToken();
 
   return (
-    <Layout>
+    <Layout /* onContextMenu={e => preventDefault()} */>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
           <h2 className="text-white font-bold text-2xl text-center flex justify-center items-center h-full">

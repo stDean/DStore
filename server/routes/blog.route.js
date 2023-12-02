@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const BlogCtrl = require("../controller/blog.ctrl");
+const UploadCtrl = require("../controller/uploadCtrl");
+
 const {
   createBlog,
   getBlogs,
@@ -12,6 +14,7 @@ const {
   dislikeBlog,
   uploadBlogImages,
 } = BlogCtrl;
+const { uploadProductImages, deleteProductImages } = UploadCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 const AUTH_MIDDLEWARE = require("../middleware/auth.middleware");
@@ -29,11 +32,16 @@ router
 router.patch("/like", AUTH_MIDDLEWARE, likeBlog);
 router.patch("/dislike", AUTH_MIDDLEWARE, dislikeBlog);
 router.patch(
-  "/upload/:id",
+  "/upload-image",
   [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],
   uploadImg.array("images", 10),
   blogImageResize,
-  uploadBlogImages
+  uploadProductImages
+);
+router.delete(
+  "/delete-image/:id",
+  [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],
+  deleteProductImages
 );
 router
   .route("/:id")

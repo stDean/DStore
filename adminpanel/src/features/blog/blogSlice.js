@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBlogs } from "./blogService";
+import { createBLogPost, getBlogs } from "./blogService";
 
 const initialState = {
   blogs: [],
@@ -14,6 +14,22 @@ export const Blogs = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       return await getBlogs();
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const createBlog = createAsyncThunk(
+  "blog/create-blog",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await createBLogPost({ data, token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -41,6 +57,22 @@ export const blogsSlice = createSlice({
         state.message = "success";
       })
       .addCase(Blogs.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.blogs = [];
+        state.message = payload;
+      })
+      .addCase(createBlog.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(createBlog.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.blogs = payload;
+        state.message = "success";
+      })
+      .addCase(createBlog.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

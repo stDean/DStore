@@ -22,7 +22,7 @@ router.post("/apply", applyCoupon);
 
 router
   .route("/:id")
-  .get(ADMIN_MIDDLEWARE, getCoupon)
+  .get(getCoupon)
   .patch(ADMIN_MIDDLEWARE, updateCoupon)
   .delete(ADMIN_MIDDLEWARE, deleteCoupon);
 

@@ -6,19 +6,27 @@ import { IoClose } from "react-icons/io5";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { Button, CustomInput } from "../components";
-import { Brands } from "../features/brand/brandSlice";
-import { productCategory } from "../features/category/categorySlice";
-import { Colors } from "../features/color/colorSlice";
-import { createProducts } from "../features/product/productSlice";
+import { Brand, Brands } from "../features/brand/brandSlice";
+import {
+  productCategory,
+  singleProdCat,
+} from "../features/category/categorySlice";
+import { Colors, singleColor } from "../features/color/colorSlice";
+import {
+  createProducts,
+  editProducts,
+  singleProduct,
+} from "../features/product/productSlice";
 import { deleteImage, imageUpload } from "../features/upload/uploadSlice";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { user } = useSelector(({ auth }) => auth);
   const { brands } = useSelector(({ brand }) => brand);
@@ -27,7 +35,19 @@ const AddProduct = () => {
   );
   const { colors } = useSelector(({ color }) => color);
   const { images } = useSelector(({ image }) => image);
-  const { isSuccess, isError } = useSelector(({ product }) => product);
+  const { isSuccess, isError, products, message } = useSelector(
+    ({ product }) => product
+  );
+
+  useEffect(() => {
+    dispatch(Brands());
+    dispatch(productCategory());
+    dispatch(Colors());
+
+    if (id) {
+      dispatch(singleProduct({ id }));
+    }
+  }, [dispatch, id]);
 
   const allColors = colors.map(item => ({
     value: item._id,
@@ -45,25 +65,40 @@ const AddProduct = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      desc: "",
-      price: "",
-      brand: "",
-      category: "",
-      tag: "",
-      quantity: "",
+      title: id ? products.title : "",
+      desc: id ? products.desc : "",
+      price: id ? products.price : "",
+      brand: id ? products.brand : "",
+      category: id ? products.category : "",
+      tag: id ? products.tag : "",
+      quantity: id ? products.quantity : "",
     },
+    enableReinitialize: true,
     onSubmit: async values => {
-      dispatch(createProducts({ token: user.token, data: values }));
-      if (isSuccess) {
-        toast.success("Product created successfully");
-        formik.resetForm();
-        setColor([]);
-        setTimeout(() => {
-          navigate("/admin/list-product");
-        }, 3000);
-      } else if (isError) {
-        toast.error("Something went wrong");
+      if (id) {
+        dispatch(editProducts({ id, token: user.token, data: values }));
+
+        if (isSuccess && (message === "updated" || "single product")) {
+          toast.success("Product Updated");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-product");
+          }, 500);
+        } else if (isError) {
+          toast.error("Something went wrong");
+        }
+      } else {
+        dispatch(createProducts({ token: user.token, data: values }));
+
+        if (isSuccess && message === "success") {
+          toast.success("Product created successfully");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-product");
+          }, 500);
+        } else if (isError) {
+          toast.error(message);
+        }
       }
     },
     validationSchema: Yup.object({
@@ -79,18 +114,15 @@ const AddProduct = () => {
         .min(1, "pick at least one color"),
     }),
   });
-  formik.values.color = color ? color : "";
+  formik.values.color = color;
   formik.values.images = img;
-
-  useEffect(() => {
-    dispatch(Brands(user.token));
-    dispatch(productCategory());
-    dispatch(Colors());
-  }, [dispatch, user.token]);
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-semibold">Add Product</h1>
+      <h1 className="mb-6 text-3xl font-semibold">
+        {" "}
+        {id ? "Edit" : "Add"} Product
+      </h1>
 
       <div className="max-w-5xl mx-auto shadow-md p-6">
         <form
@@ -117,12 +149,21 @@ const AddProduct = () => {
           </div>
 
           <div>
-            <ReactQuill
+            {/* <ReactQuill
               theme="snow"
               name="desc"
               value={formik.values.desc}
               onChange={formik.handleChange("desc")}
-            />
+            /> */}
+            <textarea
+              name="desc"
+              id=""
+              rows="3"
+              value={formik.values.desc}
+              onChange={formik.handleChange("desc")}
+              placeholder="Product description"
+              className="w-full border p-2 rounded-md"
+            ></textarea>
             <p
               className={`text-red-500 text-xs mb-3 ${
                 formik.errors.desc ? "block" : "hidden"
@@ -158,7 +199,7 @@ const AddProduct = () => {
               value={formik.values.brand}
             >
               <option value="">Select a brand</option>
-              {brands.map(brand => (
+              {brands?.map(brand => (
                 <option value={brand.title} key={brand._id}>
                   {brand.title}
                 </option>
@@ -182,7 +223,7 @@ const AddProduct = () => {
               value={formik.values.category}
             >
               <option value="">Select a category</option>
-              {categories.map(category => (
+              {categories?.map(category => (
                 <option value={category.title} key={category._id}>
                   {category.title}
                 </option>
@@ -201,7 +242,7 @@ const AddProduct = () => {
             <Select
               mode="multiple"
               allowClear
-              className="w-full text-black"
+              className="w-full text-black border border-black"
               placeholder="select color"
               defaultValue={color}
               onChange={e => setColor(e)}
@@ -300,7 +341,7 @@ const AddProduct = () => {
             </div>
           )}
 
-          <Button title="Add Product" />
+          <Button title={id ? "Edit Product" : "Add Product"} />
         </form>
       </div>
     </>

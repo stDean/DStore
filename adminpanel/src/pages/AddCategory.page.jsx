@@ -1,34 +1,65 @@
 import { useFormik } from "formik";
 import { Button, CustomInput } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { createCategories } from "../features/category/categorySlice";
+import {
+  createCategories,
+  editProdCats,
+  singleProdCat,
+} from "../features/category/categorySlice";
+import { useEffect } from "react";
 
 const AddCategory = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { user } = useSelector(({ auth }) => auth);
-  const { isSuccess, isError } = useSelector(
-    ({ productCategory }) => productCategory
-  );
+  const {
+    isSuccess,
+    isError,
+    productCategories: categories,
+    message,
+  } = useSelector(({ productCategory }) => productCategory);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(singleProdCat({ id }));
+    }
+  }, [dispatch, id]);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      title: id ? categories.title : "",
     },
+    enableReinitialize: true,
     onSubmit: async values => {
-      dispatch(createCategories({ data: values, token: user.token }));
-      if (isSuccess) {
-        toast.success("Category created successfully");
-        formik.resetForm();
-        setTimeout(() => {
-          navigate("/admin/list-category");
-        }, 3000);
-      } else if (isError) {
-        toast.error("Something went wrong");
+      if (id) {
+        dispatch(editProdCats({ id, token: user.token, data: values }));
+
+        if (isSuccess && (message === "updated" || "single prod cat")) {
+          toast.success("Brand Updated");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-category");
+          }, 500);
+        } else if (isError) {
+          toast.error("Something went wrong");
+        }
+      } else {
+        dispatch(createCategories({ data: values, token: user.token }));
+
+        if (isSuccess && message === "success") {
+          toast.success("Category created successfully");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-category");
+          }, 500);
+        } else if (isError) {
+          toast.error(message);
+        }
       }
     },
     validationSchema: Yup.object({
@@ -38,7 +69,9 @@ const AddCategory = () => {
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-semibold">Add Category</h1>
+      <h1 className="mb-6 text-3xl font-semibold">
+        {id ? "Edit" : "Add"} Category
+      </h1>
 
       <div className="max-w-5xl mx-auto shadow-md p-6">
         <form action="" onSubmit={formik.handleSubmit}>
@@ -59,7 +92,7 @@ const AddCategory = () => {
             </p>
           </div>
 
-          <Button title="Add Category" />
+          <Button title={id ? "Edit Category" : "Add Category"} />
         </form>
       </div>
     </>

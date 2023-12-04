@@ -1,10 +1,12 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Coupons } from "../features/coupon/couponSlice";
+import { Coupons, deleteCoupons } from "../features/coupon/couponSlice";
+import { toast } from "react-toastify";
+import { Modal } from "../components";
 
 const columns = [
   {
@@ -35,12 +37,30 @@ const columns = [
 
 const CouponList = () => {
   const dispatch = useDispatch();
-  const { coupons } = useSelector(({ coupon }) => coupon);
+  const { coupons, message } = useSelector(({ coupon }) => coupon);
   const { user } = useSelector(({ auth }) => auth);
+
+  const [couponId, setCouponId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setCouponId(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteCoupons({ id: couponId, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(Coupons(user.token));
-  }, [dispatch, user.token]);
+  }, [dispatch, user.token, message]);
 
   const data1 = [];
 
@@ -53,17 +73,19 @@ const CouponList = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+            to={`/admin/coupon/${coupons[i]._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <BiEdit />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(coupons[i]._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
@@ -75,6 +97,15 @@ const CouponList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this brand"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

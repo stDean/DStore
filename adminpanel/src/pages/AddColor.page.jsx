@@ -1,32 +1,62 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { createColors } from "../features/color/colorSlice";
+import {
+  createColors,
+  editColors,
+  singleColor,
+} from "../features/color/colorSlice";
+import { useEffect } from "react";
 
 const AddColor = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { user } = useSelector(({ auth }) => auth);
-  const { isError, isSuccess } = useSelector(({ color }) => color);
+  const { isError, isSuccess, colors, message } = useSelector(
+    ({ color }) => color
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(singleColor({ id }));
+    }
+  }, [dispatch, id]);
 
   const formik = useFormik({
     initialValues: {
-      title: "black",
+      title: id ? colors.title : "black",
     },
+    enableReinitialize: true,
     onSubmit: async values => {
-      dispatch(createColors({ data: values, token: user.token }));
-      if (isSuccess) {
-        toast.success("Color created successfully");
-        formik.resetForm();
-        setTimeout(() => {
-          navigate("/admin/list-color");
-        }, 3000);
-      } else if (isError) {
-        toast.error("Something went wrong");
+      if (id) {
+        dispatch(editColors({ id, token: user.token, data: values }));
+
+        if (isSuccess && (message === "updated" || "single color")) {
+          toast.success("Color Updated");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-color");
+          }, 500);
+        } else if (isError) {
+          toast.error("Something went wrong");
+        }
+      } else {
+        dispatch(createColors({ data: values, token: user.token }));
+
+        if (isSuccess && message === "success") {
+          toast.success("Color created successfully");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/list-color");
+          }, 500);
+        } else if (isError) {
+          toast.error(message);
+        }
       }
     },
     validationSchema: Yup.object({
@@ -36,7 +66,9 @@ const AddColor = () => {
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-semibold">Add Color</h1>
+      <h1 className="mb-6 text-3xl font-semibold">
+        {id ? "Edit" : "Add"} Color
+      </h1>
 
       <div className="max-w-5xl mx-auto shadow-md p-6">
         <form
@@ -56,7 +88,7 @@ const AddColor = () => {
             />
           </label>
 
-          <Button title="Add Color" />
+          <Button title={id ? "Edit Color" : "Add Color"} />
         </form>
       </div>
     </>

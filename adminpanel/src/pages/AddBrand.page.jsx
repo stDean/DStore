@@ -12,7 +12,6 @@ const AddBrand = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [title, setTitle] = useState("");
   const { user } = useSelector(({ auth }) => auth);
   const { isSuccess, isError, brands, message } = useSelector(
     ({ brand }) => brand
@@ -21,15 +20,12 @@ const AddBrand = () => {
   useEffect(() => {
     if (id) {
       dispatch(Brand({ id }));
-      setTitle(brands.title);
-    } else {
-      setTitle("");
     }
-  }, [dispatch, id, brands.title]);
+  }, [dispatch, id]);
 
   const formik = useFormik({
     initialValues: {
-      title: title,
+      title: id ? brands.title : "",
     },
     enableReinitialize: true,
     onSubmit: async values => {

@@ -51,8 +51,8 @@ const Orders = () => {
     data1.push({
       key: i + 1,
       name: `${allOrders[i]?.orderBy.firstName} ${allOrders[i]?.orderBy.lastName}`,
-      product: allOrders[i]?.products.map(product =>
-        product.product.title.split(" ").join(", ")
+      product: allOrders[i]?.products?.map(product =>
+        product?.product?.title.split(" ").join(", ")
       ),
       amount: allOrders[i]?.paymentIntent.amount,
       date: new Date(allOrders[i]?.createdAt).toLocaleString(),

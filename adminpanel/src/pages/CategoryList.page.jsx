@@ -1,10 +1,15 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { productCategory } from "../features/category/categorySlice";
+import {
+  deleteProdCats,
+  productCategory,
+} from "../features/category/categorySlice";
+import { Modal } from "../components";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -25,13 +30,32 @@ const columns = [
 
 const CategoryList = () => {
   const dispatch = useDispatch();
-  const { productCategories: categories } = useSelector(
+  const { productCategories: categories, message } = useSelector(
     ({ productCategory }) => productCategory
   );
+  const { user } = useSelector(({ auth }) => auth);
+
+  const [prodCat, setProdCat] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setProdCat(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteProdCats({ id: prodCat, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(productCategory());
-  }, [dispatch]);
+  }, [dispatch, message]);
 
   const data1 = [];
 
@@ -42,28 +66,39 @@ const CategoryList = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+            to={`/admin/category/${categories[i]._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <BiEdit />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(categories[i]._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
   }
-  
+
   return (
     <>
       <h1 className="mb-4 text-3xl font-semibold">Category List</h1>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this brand"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

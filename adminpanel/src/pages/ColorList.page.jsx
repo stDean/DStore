@@ -1,10 +1,12 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Colors } from "../features/color/colorSlice";
+import { Colors, deleteColors } from "../features/color/colorSlice";
+import { Modal } from "../components";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -23,11 +25,30 @@ const columns = [
 
 const ColorList = () => {
   const dispatch = useDispatch();
-  const { colors } = useSelector(({ color }) => color);
+  const { user } = useSelector(({ auth }) => auth);
+  const { colors, message } = useSelector(({ color }) => color);
+
+  const [colorId, setColorId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setColorId(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteColors({ id: colorId, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(Colors());
-  }, [dispatch]);
+  }, [dispatch, message]);
 
   const data1 = [];
 
@@ -38,17 +59,19 @@ const ColorList = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+             to={`/admin/color/${colors[i]._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <BiEdit />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(colors[i]._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
@@ -59,6 +82,15 @@ const ColorList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this brand"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

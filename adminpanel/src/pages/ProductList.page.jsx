@@ -4,7 +4,9 @@ import { AiFillDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Products } from "../features/product/productSlice";
+import { Products, deleteProducts } from "../features/product/productSlice";
+import { Modal } from "../components";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -43,11 +45,30 @@ const columns = [
 
 const ProductList = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector(({ product }) => product);
+  const { products, message } = useSelector(({ product }) => product);
+  const { user } = useSelector(({ auth }) => auth);
+
+  const [productId, setProductId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setProductId(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteProducts({ id: productId, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(Products());
-  }, [dispatch]);
+  }, [dispatch, message]);
 
   const data1 = [];
   const { products: allProducts } = products;
@@ -63,17 +84,19 @@ const ProductList = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+             to={`/admin/product/${allProducts[i]._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <BiEdit />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(allProducts[i]._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
@@ -85,6 +108,15 @@ const ProductList = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this brand"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

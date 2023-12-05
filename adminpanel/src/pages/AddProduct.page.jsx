@@ -3,18 +3,15 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { IoClose } from "react-icons/io5";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { Button, CustomInput } from "../components";
-import { Brand, Brands } from "../features/brand/brandSlice";
-import {
-  productCategory,
-  singleProdCat,
-} from "../features/category/categorySlice";
+import { Brands } from "../features/brand/brandSlice";
+import { productCategory } from "../features/category/categorySlice";
 import { Colors, singleColor } from "../features/color/colorSlice";
 import {
   createProducts,
@@ -49,11 +46,17 @@ const AddProduct = () => {
     }
   }, [dispatch, id]);
 
-  const allColors = colors.map(item => ({
+  let allColors = colors?.map(item => ({
     value: item._id,
     label: item.title,
   }));
   const [color, setColor] = useState([]);
+
+  useEffect(() => {
+    if (products?.color) {
+      setColor(products?.color);
+    }
+  }, [products?.color]);
 
   let img;
   if (!images.msg) {
@@ -61,6 +64,10 @@ const AddProduct = () => {
       url: img.url,
       public_id: img.public_id,
     }));
+  }
+
+  if (products?.images && images.length === 0) {
+    img = [...products?.images];
   }
 
   const formik = useFormik({
@@ -72,6 +79,8 @@ const AddProduct = () => {
       category: id ? products.category : "",
       tag: id ? products.tag : "",
       quantity: id ? products.quantity : "",
+      images: img,
+      color: color,
     },
     enableReinitialize: true,
     onSubmit: async values => {
@@ -114,13 +123,13 @@ const AddProduct = () => {
         .min(1, "pick at least one color"),
     }),
   });
-  formik.values.color = color;
-  formik.values.images = img;
+  // formik.values.color = color;
+  // formik.values.images = img;
 
+  console.log({ products, color, colors });
   return (
     <>
       <h1 className="mb-6 text-3xl font-semibold">
-        {" "}
         {id ? "Edit" : "Add"} Product
       </h1>
 
@@ -158,7 +167,7 @@ const AddProduct = () => {
             <textarea
               name="desc"
               id=""
-              rows="3"
+              rows="5"
               value={formik.values.desc}
               onChange={formik.handleChange("desc")}
               placeholder="Product description"
@@ -319,22 +328,23 @@ const AddProduct = () => {
 
           {!images.msg && (
             <div className="showImages flex">
-              {images.map(img => (
+              {formik.values?.images?.map(img => (
                 <div key={img.asset_id} className="relative">
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2"
-                    onClick={() =>
+                  <div
+                    className="absolute top-2 right-2 cursor-pointer font-bold"
+                    onClick={() => {
                       dispatch(
                         deleteImage({
                           id: img.public_id.split("/")[2],
                           token: user.token,
                         })
-                      )
-                    }
+                      );
+
+                      img = [];
+                    }}
                   >
                     <IoClose />
-                  </button>
+                  </div>
                   <img src={img.url} alt="" width={200} height={200} />
                 </div>
               ))}

@@ -30,6 +30,8 @@ const UploadCtrl = {
     );
     res.status(StatusCodes.OK).json({ msg: "Deleted" });
   },
+
+  
 };
 
 module.exports = UploadCtrl;

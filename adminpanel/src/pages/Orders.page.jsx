@@ -1,10 +1,11 @@
 import { Table } from "antd";
-import { useEffect } from "react";
-import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllOrders } from "../features/order/orderSlice";
+import { deleteOrder, getAllOrders } from "../features/order/orderSlice";
+import { toast } from "react-toastify";
+import { Modal } from "../components";
 
 const columns = [
   {
@@ -38,12 +39,31 @@ const Orders = () => {
   const dispatch = useDispatch();
   const {
     orders: { allOrders },
+    message,
   } = useSelector(({ order }) => order);
   const { user } = useSelector(({ auth }) => auth);
 
+  const [orderId, setOrderId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setOrderId(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteOrder({ id: orderId, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     dispatch(getAllOrders(user.token));
-  }, [dispatch, user.token]);
+  }, [dispatch, user.token, message]);
 
   const data1 = [];
 
@@ -59,17 +79,19 @@ const Orders = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+            to={`/admin/orders/${allOrders[i]?._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
-            <BiEdit />
+            <AiOutlineEye />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(allOrders[i]?._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
@@ -81,6 +103,15 @@ const Orders = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this order?"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

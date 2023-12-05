@@ -19,3 +19,5 @@ export { default as AddCategoryPage } from "./AddCategory.page";
 export { default as AddBrandPage } from "./AddBrand.page";
 export { default as AddProductPage } from "./AddProduct.page";
 export { default as AddCouponPage } from "./AddCoupon.page";
+export { default as ViewEnq } from "./ViewEnq.page";
+export { default as OrderEnq } from "./OrderEnq.page";

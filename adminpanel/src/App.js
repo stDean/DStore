@@ -23,6 +23,8 @@ import {
   AddBrandPage,
   AddProductPage,
   AddCouponPage,
+  OrderEnq,
+  ViewEnq,
 } from "./pages";
 
 function App() {
@@ -35,9 +37,11 @@ function App() {
         <Route path="/admin" element={<Layout />}>
           <Route index element={<DashboardPage />} />
           <Route path="enquiries" element={<EnquiriesPage />} />
+          <Route path="enquiries/:id" element={<ViewEnq />} />
           <Route path="blog-list" element={<BlogListPage />} />
           <Route path="blog-category-list" element={<BlogCategoryListPage />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="orders/:id" element={<OrderEnq />} />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="list-product" element={<ProductListPage />} />
           <Route path="list-brand" element={<BrandListPage />} />
@@ -45,7 +49,7 @@ function App() {
           <Route path="list-color" element={<ColorListPage />} />
           <Route path="coupon-list" element={<CouponListPage />} />
           <Route path="blog" element={<AddBlogPage />} />
-          <Route path="blog/id" element={<AddBlogPage />} />
+          <Route path="blog/:id" element={<AddBlogPage />} />
           <Route path="blog-category" element={<AddBlogCategoryPage />} />
           <Route path="blog-category/:id" element={<AddBlogCategoryPage />} />
           <Route path="color" element={<AddColorPage />} />

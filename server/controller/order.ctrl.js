@@ -92,6 +92,15 @@ const OrderCtrl = {
 
     res.status(StatusCodes.OK).json(updateOrderStatus);
   },
+  deleteOrder: async (req, res) => {
+    const { id } = req.params;
+    const order = await Order.findByIdAndDelete(id);
+    if (!order) {
+      throw new NotFoundError("No coupon found");
+    }
+
+    res.status(StatusCodes.OK).json({ msg: "Deleted Successfully" });
+  },
 };
 
 module.exports = OrderCtrl;

@@ -93,7 +93,7 @@ const CategoryList = () => {
 
       {isModalOpen && (
         <Modal
-          title="Are you sure you want to delete this brand"
+          title="Are you sure you want to delete this product category?"
           handleOk={deleteData}
           handleCancel={handleCancel}
           isModalOpen={isModalOpen}

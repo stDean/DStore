@@ -23,7 +23,7 @@ const AddCoupon = () => {
 
   const changeDateFormat = ({ date }) => {
     const newDate = new Date(date).toLocaleDateString();
-    const [month, day, year] = newDate.split("/");
+    const [day, month, year] = newDate.split("/");
     return [year, month, day].join("-");
   };
 

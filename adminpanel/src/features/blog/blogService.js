@@ -14,3 +14,30 @@ export const createBLogPost = async ({ data, token }) => {
   });
   return res.data;
 };
+
+export const getBlog = async id => {
+  const res = await axios.get(`${baseUrl}/blog/${id}`);
+  return res.data;
+};
+
+export const editBlog = async ({ id, token, data }) => {
+  const res = await axios.patch(
+    `${baseUrl}/blog/${id}`,
+    { ...data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const deleteBlog = async ({ id, token }) => {
+  const res = await axios.delete(`${baseUrl}/blog/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

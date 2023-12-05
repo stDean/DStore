@@ -1,10 +1,15 @@
 import { Table } from "antd";
-import { useEffect } from "react";
-import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Enquires } from "../features/enquiry/enquirySlice";
+import {
+  Enquires,
+  deleteEnquiry,
+  editEnquiry,
+} from "../features/enquiry/enquirySlice";
+import { Modal } from "../components";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -36,11 +41,34 @@ const columns = [
 
 const Enquiries = () => {
   const dispatch = useDispatch();
-  const { enquires } = useSelector(({ enquiry }) => enquiry);
+  const { enquires, message } = useSelector(({ enquiry }) => enquiry);
+  const { user } = useSelector(({ auth }) => auth);
+
+  const [enquiryId, setEnquiryId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = e => {
+    setIsModalOpen(true);
+    setEnquiryId(e);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const deleteData = () => {
+    dispatch(deleteEnquiry({ id: enquiryId, token: user.token }));
+    toast.success("Deleted Successfully");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(Enquires());
-  }, [dispatch]);
+  }, [dispatch, message]);
+
+  const setEnqStatus = (e, i) => {
+    dispatch(editEnquiry({ id: i, data: e, token: user?.token }));
+  };
 
   const data1 = [];
 
@@ -52,25 +80,35 @@ const Enquiries = () => {
       mobile: enquires[i]?.mobile,
       status: (
         <>
-          <select name="status" className="border p-2 rounded-md w-full">
-            <option value="">Set Status</option>
+          <select
+            name="status"
+            className="border p-2 rounded-md"
+            defaultValue={enquires[i].status ? enquires[i].status : "Submitted"}
+            onChange={e => setEnqStatus(e.target.value, enquires[i]?._id)}
+          >
+            <option value="Submitted">Submitted</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Contacted">Contacted</option>
+            <option value="Resolved">Resolved</option>
           </select>
         </>
       ),
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to="/"
+            to={`/admin/enquiries/${enquires[i]?._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
-            <BiEdit />
+            <AiOutlineEye />
           </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px]"
-            to="/"
+          <div
+            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
+            onClick={() => {
+              showModal(enquires[i]?._id);
+            }}
           >
             <AiFillDelete />
-          </Link>
+          </div>
         </div>
       ),
     });
@@ -82,6 +120,15 @@ const Enquiries = () => {
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+
+      {isModalOpen && (
+        <Modal
+          title="Are you sure you want to delete this enquiry?"
+          handleOk={deleteData}
+          handleCancel={handleCancel}
+          isModalOpen={isModalOpen}
+        />
+      )}
     </>
   );
 };

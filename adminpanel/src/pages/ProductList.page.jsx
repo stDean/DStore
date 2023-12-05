@@ -84,7 +84,7 @@ const ProductList = () => {
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-             to={`/admin/product/${allProducts[i]._id}`}
+            to={`/admin/product/${allProducts[i]._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <BiEdit />
@@ -111,7 +111,7 @@ const ProductList = () => {
 
       {isModalOpen && (
         <Modal
-          title="Are you sure you want to delete this brand"
+          title="Are you sure you want to delete this product?"
           handleOk={deleteData}
           handleCancel={handleCancel}
           isModalOpen={isModalOpen}

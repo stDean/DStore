@@ -87,7 +87,7 @@ const BrandList = () => {
 
       {isModalOpen && (
         <Modal
-          title="Are you sure you want to delete this brand"
+          title="Are you sure you want to delete this brand?"
           handleOk={deleteData}
           handleCancel={handleCancel}
           isModalOpen={isModalOpen}

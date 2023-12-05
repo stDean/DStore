@@ -1,24 +1,39 @@
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import Dropzone from "react-dropzone";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { Button, CustomInput } from "../components";
-import { createBlog } from "../features/blog/blogSlice";
-import { deleteImage, imageUpload } from "../features/upload/uploadSlice";
+import {
+  createBlog,
+  editBlogs,
+  resetState,
+  singleBlog,
+} from "../features/blog/blogSlice";
+import {
+  deleteImage,
+  imageUpload,
+  resetImgState,
+} from "../features/upload/uploadSlice";
 import { IoClose } from "react-icons/io5";
 import { blogCategory } from "../features/blogCat/blogCategorySlice";
 
 const AddBlog = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { user } = useSelector(({ auth }) => auth);
-  const { isSuccess, isError } = useSelector(({ blog }) => blog);
+  const {
+    isSuccess,
+    isError,
+    blogs: { blog },
+    message,
+  } = useSelector(({ blog }) => blog);
   const { blogCategories: categories } = useSelector(
     ({ blogCategory }) => blogCategory
   );
@@ -28,30 +43,62 @@ const AddBlog = () => {
     dispatch(blogCategory());
   }, [dispatch]);
 
-  let img;
+  useEffect(() => {
+    if (id) {
+      dispatch(resetImgState());
+      dispatch(singleBlog({ id }));
+    } else {
+      dispatch(resetState());
+    }
+  }, [dispatch, id]);
+
+  let img = [];
   if (!images.msg) {
-    img = images.map(img => ({
-      url: img.url,
-      public_id: img.public_id,
-    }));
+    img = [
+      ...images?.map(img => ({
+        url: img.url,
+        public_id: img.public_id,
+      })),
+    ];
+  }
+
+  if (blog?.images && images.length === 0) {
+    img = [...blog?.images];
   }
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      category: "",
-      desc: "",
+      title: id ? blog?.title : "",
+      category: id ? blog?.category : "",
+      desc: id ? blog?.desc : "",
+      images: img,
     },
+    enableReinitialize: true,
     onSubmit: async values => {
-      dispatch(createBlog({ token: user.token, data: values }));
-      if (isSuccess) {
-        toast.success("Blog created successfully");
-        formik.resetForm();
-        setTimeout(() => {
-          navigate("/admin/blog-list");
-        }, 3000);
-      } else if (isError) {
-        toast.error("Something went wrong");
+      if (id) {
+        dispatch(editBlogs({ id, token: user.token, data: values }));
+
+        if (isSuccess && (message === "updated" || "single blog")) {
+          toast.success("Blog Updated");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/blog-list");
+          }, 500);
+        } else if (isError) {
+          toast.error("Something went wrong");
+        }
+      } else {
+        dispatch(createBlog({ token: user.token, data: values }));
+
+        if (isSuccess && message === "success") {
+          toast.success("Blog created successfully");
+          formik.resetForm();
+          setTimeout(() => {
+            navigate("/admin/blog-list");
+          }, 500);
+        } else if (isError) {
+          toast.error(message);
+        }
       }
     },
     validationSchema: Yup.object({
@@ -60,11 +107,12 @@ const AddBlog = () => {
       category: Yup.string().required("Blog category is required"),
     }),
   });
-  formik.values.images = img;
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-semibold">Add Blog</h1>
+      <h1 className="mb-6 text-3xl font-semibold">
+        {id ? "Edit" : "Add"} Blog
+      </h1>
 
       <div className="max-w-5xl mx-auto shadow-md p-6">
         <form action="" onSubmit={formik.handleSubmit} className="space-y-4">
@@ -91,22 +139,23 @@ const AddBlog = () => {
 
           {!images.msg && (
             <div className="showImages flex">
-              {images.map(img => (
+              {formik.values.images?.map(img => (
                 <div key={img.asset_id} className="relative">
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2"
-                    onClick={() =>
+                  <div
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => {
                       dispatch(
                         deleteImage({
                           id: img.public_id.split("/")[2],
                           token: user.token,
                         })
-                      )
-                    }
+                      );
+
+                      img = [];
+                    }}
                   >
                     <IoClose />
-                  </button>
+                  </div>
                   <img src={img.url} alt="" width={200} height={200} />
                 </div>
               ))}
@@ -139,7 +188,7 @@ const AddBlog = () => {
               onChange={formik.handleChange}
             >
               <option value="">Select a category</option>
-              {categories.map(category => (
+              {categories?.map(category => (
                 <option value={category.title} key={category._id}>
                   {category.title}
                 </option>
@@ -155,13 +204,23 @@ const AddBlog = () => {
           </div>
 
           <div>
-            <ReactQuill
+            {/* <ReactQuill
               theme="snow"
               name="desc"
               value={formik.values.desc}
               onChange={formik.handleChange("desc")}
               className="text-black"
-            />
+            /> */}
+
+            <textarea
+              name="desc"
+              id=""
+              rows="5"
+              value={formik.values.desc}
+              onChange={formik.handleChange("desc")}
+              placeholder="Product description"
+              className="w-full border p-2 rounded-md"
+            ></textarea>
             <p
               className={`text-red-500 text-xs mb-3 ${
                 formik.errors.desc ? "block" : "hidden"
@@ -171,7 +230,7 @@ const AddBlog = () => {
             </p>
           </div>
 
-          <Button title="Add Blog" />
+          <Button type="submit" title={id ? "Edit Blog" : "Add Blog"} />
         </form>
       </div>
     </>

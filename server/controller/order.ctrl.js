@@ -58,7 +58,19 @@ const OrderCtrl = {
     res.status(StatusCodes.OK).json({ userOrders, nbHits: userOrders.length });
   },
   getAllOrders: async (req, res) => {
-    const allOrders = await Order.find({}).populate("products.product").populate("orderBy").exec();
+    const allOrders = await Order.find({})
+      .populate("products.product")
+      .populate("orderBy")
+      .exec();
+    res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
+  },
+  getSingleUsersOrderByAdmin: async (req, res) => {
+    const { id: userId } = req.params;
+    
+    const allOrders = await Order.find({ orderBy: userId })
+      .populate("products.product")
+      .populate("orderBy")
+      .exec();
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
   },
   getUserOrder: async (req, res) => {

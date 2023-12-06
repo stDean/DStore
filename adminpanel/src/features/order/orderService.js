@@ -19,8 +19,12 @@ export const deleteOrd = async ({ id, token }) => {
   return res.data;
 };
 
-export const getOrd = async id => {
-  const res = await axios.get(`${baseUrl}/order/${id}`);
+export const getOrdByUserId = async ({ id, token }) => {
+  const res = await axios.get(`${baseUrl}/order/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };
 

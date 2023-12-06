@@ -27,7 +27,7 @@ const CartCtrl = {
       let getPrice = await Product.findById(cart[i]._id)
         .select("price color")
         .exec();
-      obj.color = getPrice.color;
+      obj.color = getPrice.color[0];
       obj.price = getPrice.price;
 
       products.push(obj);

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { deleteOrd, editOrd, getOrd, getOrders } from "./orderService";
+import { deleteOrd, editOrd, getOrdByUserId, getOrders } from "./orderService";
 
 const initialState = {
   orders: [],
@@ -41,11 +41,11 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
-export const singleOrder = createAsyncThunk(
-  "order/get-order",
-  async ({ id }, { rejectWithValue }) => {
+export const getOrderByUserId = createAsyncThunk(
+  "order/get-orderByUser",
+  async ({ id, token }, { rejectWithValue }) => {
     try {
-      return await getOrd(id);
+      return await getOrdByUserId({ id, token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -111,16 +111,16 @@ export const orderSlice = createSlice({
         state.orders = [];
         state.message = payload;
       })
-      .addCase(singleOrder.pending, state => {
+      .addCase(getOrderByUserId.pending, state => {
         state.isLoading = true;
       })
-      .addCase(singleOrder.fulfilled, (state, { payload }) => {
+      .addCase(getOrderByUserId.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.orders = payload;
-        state.message = "single order";
+        state.message = "orders by a user";
       })
-      .addCase(singleOrder.rejected, (state, { payload }) => {
+      .addCase(getOrderByUserId.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

@@ -9,12 +9,14 @@ const {
   getAllOrders,
   updateUserOrder,
   deleteOrder,
+  getSingleUsersOrderByAdmin,
 } = OrderCtrl;
 
 const ADMIN_MIDDLEWARE = require("../middleware/admin.middleware");
 
 router.route("/").get(ADMIN_MIDDLEWARE, getAllOrders);
 router.route("/user").get(getUserOrders);
+router.route("/user/:id").get(ADMIN_MIDDLEWARE, getSingleUsersOrderByAdmin);
 router.route("/cash").post(createOrder);
 router.route("/:id").get(getUserOrder).delete(ADMIN_MIDDLEWARE, deleteOrder);
 router.route("/update/:id").patch(ADMIN_MIDDLEWARE, updateUserOrder);

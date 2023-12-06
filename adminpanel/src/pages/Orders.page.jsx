@@ -67,12 +67,19 @@ const Orders = () => {
 
   const data1 = [];
 
+  console.log(allOrders);
+
   for (let i = 0; i < allOrders?.length; i++) {
     data1.push({
       key: i + 1,
       name: `${allOrders[i]?.orderBy.firstName} ${allOrders[i]?.orderBy.lastName}`,
-      product: allOrders[i]?.products?.map(product =>
-        product?.product?.title.split(" ").join(", ")
+      product: (
+        <Link
+          to={`/admin/orders/${allOrders[i]?.orderBy._id}`}
+          className="hover:underline hover:underline-offset-2"
+        >
+          view all orders
+        </Link>
       ),
       amount: allOrders[i]?.paymentIntent.amount,
       date: new Date(allOrders[i]?.createdAt).toLocaleString(),

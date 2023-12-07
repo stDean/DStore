@@ -1,8 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { deleteOrd, editOrd, getOrdByUserId, getOrders } from "./orderService";
+import {
+  deleteOrd,
+  editOrd,
+  getMonthlyOrder,
+  getOrdByUserId,
+  getOrders,
+  getYearlyOrder,
+} from "./orderService";
 
 const initialState = {
   orders: [],
+  orderByMonth: [],
+  yearlyOrder: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -11,9 +20,9 @@ const initialState = {
 
 export const getAllOrders = createAsyncThunk(
   "order/get-orders",
-  async (token, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      return await getOrders(token);
+      return await getOrders({ token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -62,6 +71,38 @@ export const editOrder = createAsyncThunk(
   async ({ token, data, id }, { rejectWithValue }) => {
     try {
       return await editOrd({ data, token, id });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const getMonthlyOrders = createAsyncThunk(
+  "month-order/edit-month-order",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      return await getMonthlyOrder({ token });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const getYearlyOrders = createAsyncThunk(
+  "year-order/edit-year-order",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      return await getYearlyOrder({ token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -137,6 +178,38 @@ export const orderSlice = createSlice({
         state.message = "updated";
       })
       .addCase(editOrder.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.orders = [];
+        state.message = payload;
+      })
+      .addCase(getMonthlyOrders.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(getMonthlyOrders.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.orderByMonth = payload;
+        state.message = "monthly orders";
+      })
+      .addCase(getMonthlyOrders.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.orders = [];
+        state.message = payload;
+      })
+      .addCase(getYearlyOrders.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(getYearlyOrders.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.yearlyOrder = payload;
+        state.message = "yearly orders";
+      })
+      .addCase(getYearlyOrders.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

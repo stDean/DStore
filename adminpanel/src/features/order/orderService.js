@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../../utils/baseUrl";
 
-export const getOrders = async token => {
+export const getOrders = async ({ token }) => {
   const res = await axios.get(`${baseUrl}/order`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,5 +38,23 @@ export const editOrd = async ({ id, token, data }) => {
       },
     }
   );
+  return res.data;
+};
+
+export const getMonthlyOrder = async ({ token }) => {
+  const res = await axios.get(`${baseUrl}/order/getMonthData`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export const getYearlyOrder = async ({ token }) => {
+  const res = await axios.get(`${baseUrl}/order/getYearlyOrder`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };

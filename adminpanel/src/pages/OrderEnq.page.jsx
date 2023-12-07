@@ -20,7 +20,7 @@ const columns = [
     dataIndex: "brand",
   },
   {
-    title: "Count",
+    title: "Quantity",
     dataIndex: "count",
   },
   {
@@ -49,7 +49,6 @@ const OrderEnq = () => {
 
   const {
     orders: { allOrders },
-    message,
   } = useSelector(({ order }) => order);
   const { user } = useSelector(({ auth }) => auth);
 
@@ -59,7 +58,6 @@ const OrderEnq = () => {
     dispatch(getOrderByUserId({ id: userId, token: user?.token }));
   }, [dispatch, userId, user?.token]);
 
-  console.log([...allOrders[0].products]);
   const goBack = () => {
     navigate(-1);
   };

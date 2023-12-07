@@ -1,6 +1,5 @@
 import React from "react";
 import { BreadCrumb, CartCard, Meta } from "../components";
-import { Button } from "../components/ui/Button";
 import { ButtonLink } from "../components/ui/ButtonLink";
 
 const checkOutHeader = ["Products", "Quantity", "Price", "Remove"];

@@ -62,12 +62,10 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllOrders(user.token));
+    dispatch(getAllOrders({ token: user.token }));
   }, [dispatch, user.token, message]);
 
   const data1 = [];
-
-  console.log(allOrders);
 
   for (let i = 0; i < allOrders?.length; i++) {
     data1.push({

@@ -23,10 +23,18 @@ var orderSchema = new mongoose.Schema(
         "Dispatched",
         "Canceled",
         "Delivered",
-        "Cash On Delivery"
+        "Cash On Delivery",
       ],
     },
     paymentIntent: {},
+    month: {
+      type: String,
+      default: new Date().getMonth(),
+    },
+    totalPriceAfterDiscount: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

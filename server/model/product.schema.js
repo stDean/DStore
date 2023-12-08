@@ -55,7 +55,7 @@ var productSchema = new mongoose.Schema(
       required: [true, "Please provide a user"],
     },
     totalRatings: {
-      type: String,
+      type: Number,
       default: 0,
     },
   },

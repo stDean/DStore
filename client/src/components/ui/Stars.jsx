@@ -1,10 +1,10 @@
 import ReactStars from "react-rating-stars-component";
 
-const Stars = ({ size }) => {
+const Stars = ({ size, val }) => {
   return (
     <ReactStars
       count={5}
-      value={4}
+      value={val}
       edit={false}
       activeColor="#ffd700"
       size={size}

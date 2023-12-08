@@ -1,6 +1,11 @@
 import { BlogCard, BreadCrumb, CategoryFilter, Meta } from "../components";
+import { useSelector } from "react-redux";
 
 const Blog = () => {
+  const {
+    blogs: { blogs },
+  } = useSelector(({ blog }) => blog);
+
   return (
     <>
       <Meta title="Blog" />
@@ -12,11 +17,9 @@ const Blog = () => {
           <CategoryFilter w />
 
           <div className="grid grid-cols-6 gap-5">
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
+            {blogs?.map(item => (
+              <BlogCard key={item._id} item={item} big />
+            ))}
           </div>
         </div>
       </div>

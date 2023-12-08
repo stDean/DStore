@@ -23,8 +23,18 @@ import {
   CartPage,
   CheckoutPage,
 } from "./pages";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Blogs } from "./feature/blog/blogSlice";
+import { Products } from "./feature/products/productSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(Blogs());
+    dispatch(Products());
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -40,7 +50,7 @@ function App() {
           <Route path="signup" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password/:token" element={<ResetPasswordPage />} />
-          <Route path="blog/:slug" element={<SingleBlogPage />} />
+          <Route path="blog/:id" element={<SingleBlogPage />} />
           <Route path="store/:id" element={<SingleProductPage />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="refund" element={<RefundPolicyPage />} />
@@ -48,7 +58,7 @@ function App() {
           <Route path="terms&condition" element={<TnCPage />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
-          <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
       </Routes>
     </BrowserRouter>
   );

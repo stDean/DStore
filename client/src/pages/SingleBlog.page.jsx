@@ -1,48 +1,53 @@
 import { BreadCrumb, CategoryFilter, Meta } from "../components";
 import { BsFacebook, BsInstagram, BsSnapchat } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MdKeyboardBackspace } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { singleBlog } from "../feature/blog/blogSlice";
 // import { Button } from "../components/ui/Button";
 
 const SingleBlog = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const {
+    blog: { blog },
+  } = useSelector(({ blog }) => blog);
+
+  useEffect(() => {
+    dispatch(singleBlog({ id }));
+  }, [dispatch]);
+
+  console.log(blog);
   return (
     <>
       <Meta title="Blog | Add the title" />
 
       <div className="w-full bg-[#f5f5f7]">
-        <BreadCrumb text="The Blog Title Goes Here." />
+        <BreadCrumb text={blog?.title} />
 
         <div className="max-w-7xl mx-auto mt-8 pb-8 space-y-6">
           <div className="flex gap-5">
             <CategoryFilter w />
 
             <div className="flex-1">
-              <h1 className="text-xl font-semibold">
-                The Blog Title Goes Here.
-              </h1>
+              <h1 className="text-xl font-semibold">{blog?.title}</h1>
 
               <div className="w-full mt-3 rounded-md overflow-hidden">
-                <img src="/images/blog-1.jpg" alt="" className="w-full" />
+                <img
+                  src={
+                    blog?.images ? blog?.images[0].url : "/images/blog-1.jpg"
+                  }
+                  alt=""
+                  className="w-full h-1/2 "
+                />
               </div>
 
-              <p className="text-sm text-gray-500 mt-3">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Incidunt accusantium nostrum eligendi placeat modi dignissimos
-                hic, quod fugiat quis quia nisi quo obcaecati odio! Ea natus
-                quidem neque dolore aut deserunt iusto tempora quia omnis ab
-                tenetur, laborum expedita magni ipsam optio, suscipit dolorum
-                voluptatem debitis possimus! Minus corporis sapiente magni, eum
-                repellat, adipisci asperiores, quos omnis magnam quia beatae!
-                Non ex nostrum error ipsum, obcaecati assumenda ea ullam nobis
-                inventore iure. Ratione in tempora asperiores excepturi corrupti
-                tenetur debitis amet eligendi ex distinctio, possimus eum
-                voluptatem numquam deleniti nostrum, dicta nobis. At unde
-                commodi eius. Assumenda rem eveniet ipsa?
-              </p>
+              <p className="text-sm text-gray-500 mt-3">{blog?.desc}</p>
 
               <div className="text-xs text-gray-500 flex item-center gap-6 mt-5">
-                <p>11 June 2023</p>
-                <p>Dean</p>
+                <p>{new Date(blog?.createdAt).toDateString()}</p>
+                <p>{blog?.author}</p>
               </div>
 
               {/* Back and Comment Form */}

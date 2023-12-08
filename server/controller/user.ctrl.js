@@ -126,7 +126,7 @@ const UserCtrl = {
   },
   getWishlist: async (req, res) => {
     const { _id: userId } = req.user;
-    const user = await User.findById(userId).populate("wishlist");
+    const user = await User.findById(userId).populate("wishlist").exec();
     res.status(StatusCodes.OK).json(user);
   },
   updateUserAddress: async (req, res) => {

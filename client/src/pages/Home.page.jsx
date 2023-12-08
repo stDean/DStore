@@ -12,8 +12,16 @@ import {
 } from "../components";
 import { bannerItem, hero, miniShop, brand } from "../utils/data";
 import Marquee from "react-fast-marquee";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
+  const {
+    blogs: { blogs },
+  } = useSelector(({ blog }) => blog);
+  const {
+    products: { products },
+  } = useSelector(({ product }) => product);
+
   return (
     <>
       <Meta title="Home" />
@@ -70,12 +78,14 @@ const Home = () => {
             <div className="col-span-12 text-xl font-semibold">
               <h1>Featured Collection</h1>
             </div>
-            <Collection />
-            <Collection />
-            <Collection />
-            <Collection />
-            <Collection />
-            <Collection />
+            {products
+              ?.map(
+                item =>
+                  item.tag === "featured" && (
+                    <Collection key={item._id} item={item} />
+                  )
+              )
+              .filter((_, i) => i <= 6)}
           </div>
 
           <div className="grid grid-cols-12 gap-3 mt-10">
@@ -113,10 +123,14 @@ const Home = () => {
 
             <PopularProducts />
             <PopularProducts bg />
-            <Collection />
-            <Collection />
-            <Collection />
-            <Collection />
+            {products
+              ?.map(
+                item =>
+                  item.tag === "popular" && (
+                    <Collection key={item._id} item={item} />
+                  )
+              )
+              .filter((_, i) => i <= 4)}
           </div>
 
           {/* Marquee */}
@@ -135,10 +149,11 @@ const Home = () => {
             <div className="col-span-12 text-xl font-semibold">
               <h1>Our Latest News</h1>
             </div>
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
+            {blogs
+              ?.filter((_, i) => i <= 4)
+              ?.map(item => (
+                <BlogCard key={item._id} item={item} />
+              ))}
           </div>
         </div>
       </section>

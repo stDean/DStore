@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Collection from "./Collection.component";
+import { useSelector } from "react-redux";
 
 const images = [
   {
@@ -26,6 +27,9 @@ const images = [
 
 const Store = () => {
   const [grid, setGrid] = useState("col-span-2");
+  const {
+    products: { products },
+  } = useSelector(({ product }) => product);
 
   return (
     <div className="col-span-9 flex flex-col gap-4">
@@ -71,8 +75,8 @@ const Store = () => {
       </div>
 
       <div className="grid grid-cols-10 gap-4">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(i => (
-          <Collection key={i} layout={grid} />
+        {products?.map(item => (
+          <Collection key={item._id} layout={grid} item={item} />
         ))}
       </div>
 

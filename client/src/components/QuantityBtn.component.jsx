@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-const QuantityBtn = () => {
-  const [val, setVal] = useState(1);
+const QuantityBtn = ({ val, setVal }) => {
   return (
     <div
       className="border border-gray-400 h-10 rounded flex items-center overflow-hidden relative"
@@ -19,7 +16,15 @@ const QuantityBtn = () => {
           style={{
             marginTop: "-2px",
           }}
-          onClick={() => setVal(val => val - 1)}
+          onClick={() =>
+            setVal(val => {
+              if (val === 1) {
+                return 1;
+              } else {
+                return val - 1;
+              }
+            })
+          }
         >
           -
         </p>

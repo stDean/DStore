@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Stars from "./ui/Stars";
 import { useSelector, useDispatch } from "react-redux";
 import { addWishList } from "../feature/products/productSlice";
@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 const Collection = ({ layout, item }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { brand, category, desc, price, totalRatings, images, _id } = item;
 
   const {
@@ -18,7 +19,7 @@ const Collection = ({ layout, item }) => {
     if (isSuccess) {
       toast.success(message);
     } else if (isError) {
-      toast.success(message);
+      toast.error(message);
     }
   };
 
@@ -97,9 +98,15 @@ const Collection = ({ layout, item }) => {
         <Link>
           <img src="/images/prodcompare.svg" alt="" width={15} />
         </Link>
-        <Link>
-          <img src="/images/view.svg" alt="" width={15} />
-        </Link>
+        <div>
+          <img
+            src="/images/view.svg"
+            alt=""
+            width={15}
+            onClick={() => navigate(`/store/${_id}`)}
+            className="cursor-pointer"
+          />
+        </div>
         <Link>
           <img src="/images/add-cart.svg" alt="" width={15} />
         </Link>

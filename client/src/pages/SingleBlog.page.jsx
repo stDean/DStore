@@ -36,7 +36,9 @@ const SingleBlog = () => {
               <div className="w-full mt-3 rounded-md overflow-hidden">
                 <img
                   src={
-                    blog?.images ? blog?.images[0].url : "/images/blog-1.jpg"
+                    blog?.images.length !== 0
+                      ? blog?.images[0].url
+                      : "/images/blog-1.jpg"
                   }
                   alt=""
                   className="w-full h-1/2 "

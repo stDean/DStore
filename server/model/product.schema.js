@@ -40,7 +40,7 @@ var productSchema = new mongoose.Schema(
     images: {
       type: Array,
     },
-    color: [],
+    color: [{ type: mongoose.Schema.ObjectId, ref: "Color" }],
     tag: String,
     ratings: [
       {

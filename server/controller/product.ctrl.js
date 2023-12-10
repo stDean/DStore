@@ -27,7 +27,7 @@ const ProductCtrl = {
       match => `$${match}`
     );
 
-    let result = Product.find(JSON.parse(queryStr));
+    let result = Product.find(JSON.parse(queryStr)).populate("color");
 
     // sorting
     if (req.query.sort) {
@@ -46,7 +46,7 @@ const ProductCtrl = {
 
     // Limiting and pagination
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
+    const limit = Number(req.query.limit);
     const skip = (page - 1) * limit;
 
     if (page) {
@@ -62,7 +62,7 @@ const ProductCtrl = {
   },
   getProduct: async (req, res) => {
     const { id } = req.params;
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate("color");
 
     if (!product) {
       throw new NotFoundError("Product not found");

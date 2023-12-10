@@ -1,8 +1,31 @@
-import { Link } from "react-router-dom";
-import { ButtonLink } from "./ui/ButtonLink";
+import { Link, useNavigate } from "react-router-dom";
 import Stars from "./ui/Stars";
+import { useSelector, useDispatch } from "react-redux";
+import { addWishList } from "../feature/products/productSlice";
+import { toast } from "react-toastify";
+import { Button } from "./ui/Button";
+import { addItemToCart } from "../feature/user/userSlice";
 
-const SpecialProducts = () => {
+const SpecialProducts = ({ item }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { title, brand, price, quantity, totalRatings, images, sold, _id } =
+    item;
+
+  const {
+    currentUser: { token, user },
+  } = useSelector(({ auth }) => auth);
+  const { isSuccess, message, isError } = useSelector(({ product }) => product);
+
+  const addToWishlist = id => {
+    dispatch(addWishList({ productId: id, token: token }));
+    if (isSuccess) {
+      toast.success(message);
+    } else if (isError) {
+      toast.error(message);
+    }
+  };
+
   return (
     <div className="col-span-4 flex bg-white shadow-lg rounded-md overflow-hidden p-4 group">
       <div className="flex-1 relative overflow-hidden">
@@ -13,9 +36,13 @@ const SpecialProducts = () => {
           src="/images/wishlist.svg"
           alt=""
           width={15}
-          className="absolute top-0 right-3 z-10 invert"
+          className="absolute top-0 right-3 z-10 invert cursor-pointer"
+          onClick={() => addToWishlist(_id)}
         />
-        <img src="/images/tab.jpg" alt="" />
+        <img
+          src={images.length !== 0 ? images[0].url : "/images/tab.jpg"}
+          alt=""
+        />
 
         {/* add swiper here */}
         <div className="flex overflow-hidden gap-2">
@@ -25,20 +52,31 @@ const SpecialProducts = () => {
 
         <div className="absolute flex flex-col top-6 group-hover:right-3 space-y-2 -right-20 duration-500">
           <Link>
-            <img src="/images/prodcompare.svg" alt="" width={15} />
+            <img
+              src="/images/prodcompare.svg"
+              alt=""
+              width={15}
+              className="cursor-pointer"
+            />
           </Link>
-          <Link>
-            <img src="/images/view.svg" alt="" width={15} />
-          </Link>
+          <div>
+            <img
+              onClick={() => navigate(`/store/${_id}`)}
+              src="/images/view.svg"
+              alt=""
+              width={15}
+              className="cursor-pointer"
+            />
+          </div>
         </div>
       </div>
       <div className="flex-1 mb-8 space-y-3">
-        <p className="text-sm text-[#bf4800] font-semibold">Sony</p>
-        <h1 className="font-semibold">Samsung Galaxy Tab A SM-T295, 4G</h1>
+        <p className="text-sm text-[#bf4800] font-semibold">{brand}</p>
+        <h1 className="font-semibold">{title}</h1>
 
-        <Stars size={20} />
+        <Stars size={20} val={totalRatings} />
         <p className="font-semibold text-[#bf4800]">
-          $16.00{" "}
+          ${price}{" "}
           <span className="line-through text-gray-400 font-light">$25.00</span>
         </p>
         <p className="text-sm text-gray-400">
@@ -56,15 +94,15 @@ const SpecialProducts = () => {
           </span>
         </p>
         <div className="flex flex-col gap-0">
-          <p className="text-xs text-gray-400 mb-1">Products: 200</p>
+          <p className="text-xs text-gray-400 mb-1">Products: {quantity}</p>
           <div class="w-full bg-gray-200 rounded-full h-1.5 mb-4 dark:bg-gray-700">
             <div
               class="bg-blue-600 h-1.5 rounded-full dark:bg-blue-500"
-              style={{ width: "45%" }}
+              style={{ width: `calc(${sold / quantity} * 100%)` }}
             ></div>
           </div>
         </div>
-        <ButtonLink text="ADD TO CART" />
+        <Button text="VIEW PRODUCT" onClick={() => navigate(`/store/${_id}`)} />
       </div>
     </div>
   );

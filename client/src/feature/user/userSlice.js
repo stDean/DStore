@@ -1,26 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  addToWishList,
-  getProducts,
-  getWishList,
-  product,
-} from "./productService";
+import { addToCart, getCart, removeCartItem, updateQty } from "./userService";
 
 const initialState = {
-  products: [],
-  product: [],
-  userWishList: [],
+  cartItem: [],
+  userCart: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
   message: "",
 };
 
-export const Products = createAsyncThunk(
-  "product/get-products",
-  async (_, { rejectWithValue }) => {
+export const addItemToCart = createAsyncThunk(
+  "cart/add-cart",
+  async ({ cartData, token }, { rejectWithValue }) => {
     try {
-      return await getProducts();
+      return await addToCart({ cartData, token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -32,43 +26,11 @@ export const Products = createAsyncThunk(
   }
 );
 
-export const singleProduct = createAsyncThunk(
-  "product/get-product",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      return await product({ id });
-    } catch (error) {
-      // return custom error message from backend if present
-      if (error.response && error.response.data.msg) {
-        return rejectWithValue(error.response.data.msg);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
-export const addWishList = createAsyncThunk(
-  "wish/add-wish",
-  async ({ productId, token }, { rejectWithValue }) => {
-    try {
-      return await addToWishList({ productId, token });
-    } catch (error) {
-      // return custom error message from backend if present
-      if (error.response && error.response.data.msg) {
-        return rejectWithValue(error.response.data.msg);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
-export const getUserWishList = createAsyncThunk(
-  "wish/get-wish",
+export const getUserCart = createAsyncThunk(
+  "cart/get-cart",
   async ({ token }, { rejectWithValue }) => {
     try {
-      return await getWishList({ token });
+      return await getCart({ token });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -80,71 +42,101 @@ export const getUserWishList = createAsyncThunk(
   }
 );
 
-const productSlice = createSlice({
-  name: "product",
+export const removeUserCart = createAsyncThunk(
+  "cart/remove-cart",
+  async ({ token, cartId }, { rejectWithValue }) => {
+    try {
+      return await removeCartItem({ token, cartId });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const updateQuantity = createAsyncThunk(
+  "cart/update-quantity",
+  async ({ token, cartId, quantity }, { rejectWithValue }) => {
+    try {
+      return await updateQty({ token, cartId, quantity });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(Products.pending, state => {
+      .addCase(addItemToCart.pending, state => {
         state.isLoading = true;
       })
-      .addCase(Products.fulfilled, (state, { payload }) => {
+      .addCase(addItemToCart.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.products = payload;
+        state.cartItem = payload;
       })
-      .addCase(Products.rejected, (state, { payload }) => {
+      .addCase(addItemToCart.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = payload;
       })
-      .addCase(addWishList.pending, state => {
+      .addCase(getUserCart.pending, state => {
         state.isLoading = true;
       })
-      .addCase(addWishList.fulfilled, (state, { payload }) => {
+      .addCase(getUserCart.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = "Product added to wishlist";
+        state.userCart = payload;
       })
-      .addCase(addWishList.rejected, (state, { payload }) => {
+      .addCase(getUserCart.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "Something went wrong";
+        state.message = payload;
       })
-      .addCase(getUserWishList.pending, state => {
+      .addCase(removeUserCart.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getUserWishList.fulfilled, (state, { payload }) => {
+      .addCase(removeUserCart.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.userWishList = payload.wishlist;
-        state.message = "Product added to wishlist";
+        state.message = payload;
       })
-      .addCase(getUserWishList.rejected, (state, { payload }) => {
+      .addCase(removeUserCart.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "Something went wrong";
+        state.message = payload;
       })
-      .addCase(singleProduct.pending, state => {
+      .addCase(updateQuantity.pending, state => {
         state.isLoading = true;
       })
-      .addCase(singleProduct.fulfilled, (state, { payload }) => {
+      .addCase(updateQuantity.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.product = payload;
-        state.message = "Product added to wishlist";
+        // state.userCart = payload;
       })
-      .addCase(singleProduct.rejected, (state, { payload }) => {
+      .addCase(updateQuantity.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "Something went wrong";
+        state.message = payload;
       });
   },
 });
 
-export default productSlice.reducer;
+export default userSlice.reducer;

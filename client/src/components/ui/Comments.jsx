@@ -7,7 +7,7 @@ const Comments = ({ comment, commentBy, commentDate }) => {
       <div className="">
         <p className="text-sm font-semibold text-black pb-2">
           {commentBy}
-          <spn className="text-gray-500 text-xs"> on </spn> {commentDate}
+          <span className="text-gray-500 text-xs"> on </span> {commentDate}
         </p>
         <Stars size={15} />
         <p className="text-sm pt-2">{comment}</p>

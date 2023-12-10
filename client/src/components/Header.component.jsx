@@ -1,9 +1,30 @@
 import { Link, NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserCart } from "../feature/user/userSlice";
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
+  const dispatch = useDispatch();
+
+  const [total, setTotal] = useState(0);
+  const {
+    currentUser: { token },
+  } = useSelector(({ auth }) => auth);
+  const { userCart, message } = useSelector(({ user }) => user);
+
+  useEffect(() => {
+    dispatch(getUserCart({ token }));
+  }, [dispatch, message]);
+
+  useEffect(() => {
+    let sum = 0;
+    for (let i = 0; i < userCart.length; i++) {
+      sum += Math.floor(Number(userCart[i].quantity * userCart[i].price));
+    }
+    setTotal(sum);
+  }, [userCart]);
 
   return (
     <header className="w-full">
@@ -84,10 +105,7 @@ const Header = () => {
                 >
                   Login
                 </Link>
-                <Link
-                  to="/signup"
-                  className="pt-2"
-                >
+                <Link to="/signup" className="pt-2">
                   Register
                 </Link>
               </div>
@@ -97,10 +115,10 @@ const Header = () => {
                 <img src="/images/cart.svg" alt="cart" />
                 <div className="text-center ">
                   <span className="bg-white px-2 text-black text-xs rounded -mb-1">
-                    0
+                    {userCart.length}
                   </span>
                   <br />
-                  <span className="text-xs block">$0.00</span>
+                  <span className="text-xs block">${total}</span>
                 </div>
               </Link>
             </div>

@@ -29,3 +29,8 @@ export const getWishList = async ({ token }) => {
 
   return res.data;
 };
+
+export const product = async ({ id }) => {
+  const res = await axios.get(`${baseUrl}/product/${id}`);
+  return res.data;
+};

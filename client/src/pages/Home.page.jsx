@@ -85,7 +85,8 @@ const Home = () => {
                     <Collection key={item._id} item={item} />
                   )
               )
-              .filter((_, i) => i <= 6)}
+              .filter(v => v)
+              .filter((_, i) => i <= 5)}
           </div>
 
           <div className="grid grid-cols-12 gap-3 mt-10">
@@ -107,12 +108,15 @@ const Home = () => {
               <h1>Special Products</h1>
             </div>
 
-            <SpecialProducts />
-            <SpecialProducts />
-            <SpecialProducts />
-            <SpecialProducts />
-            <SpecialProducts />
-            <SpecialProducts />
+            {products
+              ?.map(
+                item =>
+                  item.tag === "special" && (
+                    <SpecialProducts key={item._id} item={item} />
+                  )
+              )
+              .filter(v => v)
+              .filter((_, i) => i <= 5)}
           </div>
 
           {/* Popular Products */}
@@ -130,7 +134,8 @@ const Home = () => {
                     <Collection key={item._id} item={item} />
                   )
               )
-              .filter((_, i) => i <= 4)}
+              .filter(v => v)
+              .filter((_, i) => i <= 3)}
           </div>
 
           {/* Marquee */}

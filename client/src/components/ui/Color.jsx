@@ -1,4 +1,4 @@
-export const Color = ({ color, width = false, active = false }) => {
+export const Color = ({ color, setClick, active, width }) => {
   return (
     <div
       className={`${
@@ -7,12 +7,13 @@ export const Color = ({ color, width = false, active = false }) => {
       }`}
     >
       <div
-        className={`rounded-full ${width ? "w-4" : "w-6"} ${
+        className={`rounded-full cursor-pointer ${width ? "w-4" : "w-6"} ${
           width ? "h-4" : "h-6"
         }`}
         style={{
           backgroundColor: color,
         }}
+        onClick={setClick}
       />
     </div>
   );

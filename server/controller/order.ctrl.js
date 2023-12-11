@@ -39,13 +39,15 @@ const OrderCtrl = {
   },
   getUserOrders: async (req, res) => {
     const userOrders = await Order.find({ orderBy: req.user._id })
-      .populate("products.product")
+      .populate("orderItems.product")
+      .populate("orderItems.color")
+      .populate("orderBy")
       .exec();
     res.status(StatusCodes.OK).json({ userOrders, nbHits: userOrders.length });
   },
   getAllOrders: async (req, res) => {
     const allOrders = await Order.find({})
-      .populate("products.product")
+      .populate("orderItems.product")
       .populate("orderBy")
       .exec();
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
@@ -54,7 +56,7 @@ const OrderCtrl = {
     const { id: userId } = req.params;
 
     const allOrders = await Order.find({ orderBy: userId })
-      .populate("products.product")
+      .populate("orderItems.product")
       .populate("orderBy")
       .exec();
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
@@ -65,7 +67,7 @@ const OrderCtrl = {
       params: { id: orderId },
     } = req;
     const userOrder = await Order.findOne({ orderBy: userId, _id: orderId })
-      .populate("products.product")
+      .populate("orderItems.product")
       .exec();
     res.status(StatusCodes.OK).json(userOrder);
   },

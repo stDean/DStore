@@ -107,7 +107,7 @@ const Header = () => {
               </div>
 
               {!user ? (
-                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 mt-1">
                   <Link
                     to="/login"
                     className="border-b border-blue-300 w-full pb-2"
@@ -119,12 +119,18 @@ const Header = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 mt-1">
+                  <Link
+                    to="/profile"
+                    className="border-b border-blue-300 w-full pb-2"
+                  >
+                    Profile
+                  </Link>
                   <div
-                    className="w-full cursor-pointer"
+                    className="w-full cursor-pointer pt-2"
                     onClick={() => dispatch(logoutUser())}
                   >
-                    Login
+                    Logout
                   </div>
                 </div>
               )}
@@ -191,8 +197,8 @@ const Header = () => {
               >
                 <div class="py-1" role="none">
                   <Link
-                    to="/"
-                    class="text-white hover:opacity-90 block px-4 py-2 text-sm"
+                    to="/profile"
+                    className="text-white hover:opacity-90 block px-4 py-2 text-sm"
                     role="menuitem"
                     tabindex="-1"
                     id="menu-item-0"
@@ -201,7 +207,7 @@ const Header = () => {
                   </Link>
                   <Link
                     to="/"
-                    class="text-white hover:opacity-90 block px-4 py-2 text-sm"
+                    className="text-white hover:opacity-90 block px-4 py-2 text-sm"
                     role="menuitem"
                     tabindex="-1"
                     id="menu-item-1"
@@ -210,24 +216,23 @@ const Header = () => {
                   </Link>
                   <Link
                     to="/"
-                    class="text-white hover:opacity-90 block px-4 py-2 text-sm"
+                    className="text-white hover:opacity-90 block px-4 py-2 text-sm"
                     role="menuitem"
                     tabindex="-1"
                     id="menu-item-2"
                   >
                     License
                   </Link>
-                  <form method="POST" action="/" role="none">
-                    <button
-                      type="submit"
-                      class="text-white hover:opacity-90 block w-full px-4 py-2 text-left text-sm"
-                      role="menuitem"
-                      tabindex="-1"
-                      id="menu-item-3"
-                    >
-                      Sign out
-                    </button>
-                  </form>
+                  <div
+                    type="submit"
+                    className="text-white hover:opacity-90 block w-full px-4 py-2 text-left text-sm cursor-pointer"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3"
+                    onClick={() => dispatch(logoutUser())}
+                  >
+                    Sign out
+                  </div>
                 </div>
               </div>
             )}
@@ -239,6 +244,9 @@ const Header = () => {
             </NavLink>
             <NavLink to="/store" className="">
               OUR STORE
+            </NavLink>
+            <NavLink to="/my-orders" className="">
+              ORDERS
             </NavLink>
             <NavLink to="/blogs" className="">
               BLOG

@@ -30,3 +30,8 @@ export const logout = async () => {
 
   return res.data;
 };
+
+export const forgot = async ({ data }) => {
+  const res = await axios.post(`${baseUrl}/auth/forget-password`, data);
+  return res.data;
+};

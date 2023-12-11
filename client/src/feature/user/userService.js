@@ -49,3 +49,21 @@ export const processOrder = async ({ token, data }) => {
   });
   return res.data;
 };
+
+export const getOrders = async ({ token }) => {
+  const res = await axios.get(`${baseUrl}/order/user`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export const updateUser = async ({ token, data }) => {
+  const res = await axios.patch(`${baseUrl}/update-user`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

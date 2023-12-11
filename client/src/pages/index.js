@@ -17,3 +17,5 @@ export { default as ShippingPolicyPage } from "./ShippingPolicy.page";
 export { default as TnCPage } from "./T&C.page";
 export { default as CartPage } from "./Cart.page";
 export { default as CheckoutPage } from "./Checkout.page";
+export { default as OrderPage } from "./Order.page";
+export { default as ProfilePage } from "./Profile.page";

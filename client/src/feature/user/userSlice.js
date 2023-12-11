@@ -2,14 +2,18 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addToCart,
   getCart,
+  getOrders,
   processOrder,
   removeCartItem,
   updateQty,
+  updateUser,
 } from "./userService";
 
 const initialState = {
   cartItem: [],
   userCart: [],
+  userOrder: [],
+  userOrders: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -96,6 +100,38 @@ export const processUserOrder = createAsyncThunk(
   }
 );
 
+export const getUserOrder = createAsyncThunk(
+  "user/get-orders",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      return await getOrders({ token });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  "user/update-profile",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await updateUser({ token, data });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -171,6 +207,34 @@ const userSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = payload;
+      })
+      .addCase(getUserOrder.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(getUserOrder.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.userOrders = payload;
+      })
+      .addCase(getUserOrder.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = payload;
+      })
+      .addCase(updateProfile.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.updatedUser = payload;
+      })
+      .addCase(updateProfile.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = "Something went wrong";
       });
   },
 });

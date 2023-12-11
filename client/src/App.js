@@ -16,7 +16,9 @@ import {
   ForgotPasswordPage,
   HomePage,
   LoginPage,
+  OrderPage,
   PrivacyPolicyPage,
+  ProfilePage,
   RefundPolicyPage,
   RegisterPage,
   ResetPasswordPage,
@@ -59,8 +61,14 @@ function App() {
             path="signup"
             element={currentUser ? <Navigate to="/" /> : <RegisterPage />}
           />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+          <Route
+            path="forgot-password"
+            element={currentUser ? <Navigate to="/" /> : <ForgotPasswordPage />}
+          />
+          <Route
+            path="reset-password/:token"
+            element={currentUser ? <Navigate to="/" /> : <ResetPasswordPage />}
+          />
           <Route path="blog/:id" element={<SingleBlogPage />} />
           <Route path="store/:id" element={<SingleProductPage />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
@@ -75,6 +83,14 @@ function App() {
           <Route
             path="cart"
             element={currentUser ? <CartPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="my-orders"
+            element={currentUser ? <OrderPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="profile"
+            element={currentUser ? <ProfilePage /> : <Navigate to="/login" />}
           />
         </Route>
         <Route

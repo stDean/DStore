@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { login, logout, register } from "./authService";
+import { forgot, login, logout, register } from "./authService";
 
 const userDefaultState = localStorage.getItem("currentUser")
   ? JSON.parse(localStorage.getItem("currentUser"))
@@ -61,6 +61,22 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const forgotPass = createAsyncThunk(
+  "auth/forgot",
+  async ({ data }, { rejectWithValue }) => {
+    try {
+      return await forgot({ data });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -107,6 +123,21 @@ export const authSlice = createSlice({
         state.message = payload.msg;
       })
       .addCase(logoutUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.currentUser = null;
+        state.message = payload;
+      })
+      .addCase(forgotPass.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(forgotPass.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = "Reset link has been sent to your email.";
+      })
+      .addCase(forgotPass.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

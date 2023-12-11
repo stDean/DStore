@@ -1,9 +1,11 @@
 import React from "react";
 import { BreadCrumb, Input, Meta } from "../components";
 import { Button } from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
+  const { token } = useParams();
+  console.log(token);
   return (
     <>
       <Meta title="Reset Password" />

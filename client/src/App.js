@@ -1,32 +1,32 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import "./App.css";
-import { Layout } from "./components";
-import {
-  AboutPage,
-  HomePage,
-  ContactPage,
-  StorePage,
-  BlogPage,
-  CompareProductPage,
-  WishlistPage,
-  LoginPage,
-  RegisterPage,
-  ForgotPasswordPage,
-  ResetPasswordPage,
-  SingleBlogPage,
-  SingleProductPage,
-  TnCPage,
-  ShippingPolicyPage,
-  RefundPolicyPage,
-  PrivacyPolicyPage,
-  CartPage,
-  CheckoutPage,
-} from "./pages";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import "./App.css";
+import { Layout } from "./components";
 import { Blogs } from "./feature/blog/blogSlice";
 import { Products } from "./feature/products/productSlice";
+import {
+  AboutPage,
+  BlogPage,
+  CartPage,
+  CheckoutPage,
+  CompareProductPage,
+  ContactPage,
+  ForgotPasswordPage,
+  HomePage,
+  LoginPage,
+  PrivacyPolicyPage,
+  RefundPolicyPage,
+  RegisterPage,
+  ResetPasswordPage,
+  ShippingPolicyPage,
+  SingleBlogPage,
+  SingleProductPage,
+  StorePage,
+  TnCPage,
+  WishlistPage,
+} from "./pages";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +34,8 @@ function App() {
     dispatch(Blogs());
     dispatch(Products());
   }, [dispatch]);
+
+  const { currentUser } = useSelector(({ auth }) => auth);
 
   return (
     <BrowserRouter>
@@ -45,20 +47,40 @@ function App() {
           <Route path="store" element={<StorePage />} />
           <Route path="blogs" element={<BlogPage />} />
           <Route path="compare" element={<CompareProductPage />} />
-          <Route path="wishlist" element={<WishlistPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="signup" element={<RegisterPage />} />
+          <Route
+            path="wishlist"
+            element={currentUser ? <WishlistPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="login"
+            element={currentUser ? <Navigate to="/" /> : <LoginPage />}
+          />
+          <Route
+            path="signup"
+            element={currentUser ? <Navigate to="/" /> : <RegisterPage />}
+          />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password/:token" element={<ResetPasswordPage />} />
           <Route path="blog/:id" element={<SingleBlogPage />} />
           <Route path="store/:id" element={<SingleProductPage />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="refund" element={<RefundPolicyPage />} />
-          <Route path="shipping" element={<ShippingPolicyPage />} />
+          <Route
+            path="shipping"
+            element={
+              !currentUser ? <Navigate to="/" /> : <ShippingPolicyPage />
+            }
+          />
           <Route path="terms&condition" element={<TnCPage />} />
-          <Route path="cart" element={<CartPage />} />
+          <Route
+            path="cart"
+            element={currentUser ? <CartPage /> : <Navigate to="/login" />}
+          />
         </Route>
-        <Route path="checkout" element={<CheckoutPage />} />
+        <Route
+          path="checkout"
+          element={currentUser ? <CheckoutPage /> : <Navigate to="/login" />}
+        />
       </Routes>
     </BrowserRouter>
   );

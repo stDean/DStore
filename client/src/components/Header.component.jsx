@@ -3,20 +3,22 @@ import { BsSearch } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCart } from "../feature/user/userSlice";
+import { logoutUser } from "../feature/auth/authSlice";
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
   const dispatch = useDispatch();
 
   const [total, setTotal] = useState(0);
-  const {
-    currentUser: { token },
-  } = useSelector(({ auth }) => auth);
+  const { currentUser } = useSelector(({ auth }) => auth);
   const { userCart, message } = useSelector(({ user }) => user);
+
+  const user = currentUser?.user;
+  const token = currentUser?.token;
 
   useEffect(() => {
     dispatch(getUserCart({ token }));
-  }, [dispatch, message]);
+  }, [dispatch, message, token]);
 
   useEffect(() => {
     let sum = 0;
@@ -93,22 +95,39 @@ const Header = () => {
             <div className="group relative">
               <div className="flex gap-2 items-center">
                 <img src="/images/user.svg" alt="user" />
-                <p className="text-white text-sm">
-                  Log In <br /> My Account
-                </p>
+                {user ? (
+                  <p className="text-white text-sm">
+                    Welcome {user?.firstName}
+                  </p>
+                ) : (
+                  <p className="text-white text-sm">
+                    Log In <br /> My Account
+                  </p>
+                )}
               </div>
 
-              <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
-                <Link
-                  to="/login"
-                  className="border-b border-blue-300 w-full pb-2"
-                >
-                  Login
-                </Link>
-                <Link to="/signup" className="pt-2">
-                  Register
-                </Link>
-              </div>
+              {!user ? (
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
+                  <Link
+                    to="/login"
+                    className="border-b border-blue-300 w-full pb-2"
+                  >
+                    Login
+                  </Link>
+                  <Link to="/signup" className="pt-2">
+                    Register
+                  </Link>
+                </div>
+              ) : (
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 ">
+                  <div
+                    className="w-full cursor-pointer"
+                    onClick={() => dispatch(logoutUser())}
+                  >
+                    Login
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <Link to="/cart" className="flex gap-3 items-center">

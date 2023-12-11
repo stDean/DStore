@@ -11,7 +11,7 @@ const CartCard = ({ cart, token }) => {
   const { color, price, quantity, product, _id } = cart;
   const [userQuantity, setUserQuantity] = useState(quantity);
 
-  const { isError, isSuccess, updateCart } = useSelector(({ user }) => user);
+  const { isError, isSuccess } = useSelector(({ user }) => user);
 
   const removeItem = () => {
     dispatch(removeUserCart({ token, cartId: _id }));

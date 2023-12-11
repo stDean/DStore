@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addToCart, getCart, removeCartItem, updateQty } from "./userService";
+import {
+  addToCart,
+  getCart,
+  processOrder,
+  removeCartItem,
+  updateQty,
+} from "./userService";
 
 const initialState = {
   cartItem: [],
@@ -74,6 +80,22 @@ export const updateQuantity = createAsyncThunk(
   }
 );
 
+export const processUserOrder = createAsyncThunk(
+  "user/process-order",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await processOrder({ token, data });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -131,6 +153,20 @@ const userSlice = createSlice({
         // state.userCart = payload;
       })
       .addCase(updateQuantity.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = payload;
+      })
+      .addCase(processUserOrder.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(processUserOrder.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.userOrder = payload;
+      })
+      .addCase(processUserOrder.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

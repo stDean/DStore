@@ -1,6 +1,6 @@
 import React from "react";
 import { BreadCrumb, Input, Meta } from "../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -11,6 +11,8 @@ import { useEffect } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { isSuccess, isError, message } = useSelector(({ auth }) => auth);
 
   const formik = useFormik({
@@ -20,6 +22,7 @@ const Login = () => {
     },
     onSubmit: async values => {
       dispatch(loginUser({ userData: values }));
+      formik.resetForm();
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -32,11 +35,11 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Logged In Successful");
-      formik.resetForm();
+      navigate("/");
     } else if (isError) {
       toast.error(message);
     }
-  }, [isSuccess, isError, message]);
+  }, [isSuccess, isError, message, navigate]);
 
   return (
     <>

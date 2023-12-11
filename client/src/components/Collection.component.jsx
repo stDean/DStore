@@ -9,10 +9,10 @@ const Collection = ({ layout, item }) => {
   const navigate = useNavigate();
   const { brand, category, desc, price, totalRatings, images, _id } = item;
 
-  const {
-    currentUser: { token, user },
-  } = useSelector(({ auth }) => auth);
+  const { currentUser } = useSelector(({ auth }) => auth);
   const { isSuccess, message, isError } = useSelector(({ product }) => product);
+
+  const token = currentUser?.token;
 
   const addToWishlist = id => {
     dispatch(addWishList({ productId: id, token: token }));

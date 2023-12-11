@@ -1,10 +1,9 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import Stars from "./ui/Stars";
-import { useSelector, useDispatch } from "react-redux";
-import { addWishList } from "../feature/products/productSlice";
 import { toast } from "react-toastify";
+import { addWishList } from "../feature/products/productSlice";
 import { Button } from "./ui/Button";
-import { addItemToCart } from "../feature/user/userSlice";
+import Stars from "./ui/Stars";
 
 const SpecialProducts = ({ item }) => {
   const dispatch = useDispatch();
@@ -12,10 +11,10 @@ const SpecialProducts = ({ item }) => {
   const { title, brand, price, quantity, totalRatings, images, sold, _id } =
     item;
 
-  const {
-    currentUser: { token, user },
-  } = useSelector(({ auth }) => auth);
+  const { currentUser } = useSelector(({ auth }) => auth);
   const { isSuccess, message, isError } = useSelector(({ product }) => product);
+
+  const token = currentUser?.token;
 
   const addToWishlist = id => {
     dispatch(addWishList({ productId: id, token: token }));

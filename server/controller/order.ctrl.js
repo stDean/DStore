@@ -8,49 +8,34 @@ const uniqId = require("uniqid");
 const OrderCtrl = {
   createOrder: async (req, res) => {
     const {
-      body: { COD, couponApplied },
       user: { _id: userId },
     } = req;
 
-    if (!COD) throw new BadRequestError("Cash On Delivery Failed");
+    // const userCart = await Cart.findOne({ userCart: userId });
+    // let finalAmount = 0;
 
-    const userCart = await Cart.findOne({ userCart: userId });
-    let finalAmount = 0;
-
-    if (couponApplied && userCart.totalAfterDiscount) {
-      finalAmount = userCart.totalAfterDiscount;
-    } else {
-      finalAmount = userCart.cartTotal;
-    }
+    // if (couponApplied && userCart.totalAfterDiscount) {
+    //   finalAmount = userCart.totalAfterDiscount;
+    // } else {
+    //   finalAmount = userCart.cartTotal;
+    // }
 
     // place the order
-    await new Order({
-      products: userCart.products,
-      orderBy: userId,
-      paymentIntent: {
-        id: uniqId(),
-        method: "COD",
-        amount: finalAmount,
-        paymentMethod: "Cash On Delivery",
-        orderDate: Date.now(),
-        currency: "usd",
-        status: "pending",
-      },
-      orderStatus: "Cash On Delivery",
-      totalPriceAfterDiscount: finalAmount
-    }).save();
+    const order = await new Order({ orderBy: userId, ...req.body }).save();
 
     // update the products sold and quantity fields through the userCart product id
-    const update = userCart?.products.map(item => ({
-      updateOne: {
-        filter: { _id: item.product._id },
-        update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
-      },
-    }));
+    // const update = userCart?.products.map(item => ({
+    //   updateOne: {
+    //     filter: { _id: item.product._id },
+    //     update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
+    //   },
+    // }));
 
-    await Product.bulkWrite(update, {});
+    // await Product.bulkWrite(update, {});
 
-    res.status(StatusCodes.CREATED).json({ msg: "Order successfully created" });
+    res
+      .status(StatusCodes.CREATED)
+      .json({ msg: "Order successfully created", order });
   },
   getUserOrders: async (req, res) => {
     const userOrders = await Order.find({ orderBy: req.user._id })

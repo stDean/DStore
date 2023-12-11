@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { login, register } from "./authService";
+import { login, logout, register } from "./authService";
 
 const userDefaultState = localStorage.getItem("currentUser")
   ? JSON.parse(localStorage.getItem("currentUser"))
@@ -45,6 +45,22 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk(
+  "auth/admin-logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await logout();
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -75,6 +91,22 @@ export const authSlice = createSlice({
         state.message = "success";
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.currentUser = null;
+        state.message = payload;
+      })
+      .addCase(logoutUser.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.currentUser = [];
+        state.message = payload.msg;
+      })
+      .addCase(logoutUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

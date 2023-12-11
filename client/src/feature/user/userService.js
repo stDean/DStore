@@ -40,3 +40,12 @@ export const updateQty = async ({ token, cartId, quantity }) => {
   );
   return res.data;
 };
+
+export const processOrder = async ({ token, data }) => {
+  const res = await axios.post(`${baseUrl}/order/cash`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

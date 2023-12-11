@@ -17,7 +17,7 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(getUserCart({ token }));
-  }, [dispatch, message]);
+  }, [dispatch, message, token]);
 
   useEffect(() => {
     let sum = 0;
@@ -25,7 +25,11 @@ const Cart = () => {
       sum += Math.floor(Number(userCart[i].quantity * userCart[i].price));
     }
     setTotal(sum);
-  }, [userCart]);
+  }, [userCart, total]);
+
+  if (userCart.length === 0) {
+    return <div className="text-center text-xl my-4">Your cart is empty!!</div>;
+  }
 
   return (
     <>

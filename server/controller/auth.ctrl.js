@@ -110,7 +110,7 @@ const AuthCtrl = {
     }
 
     const accessToken = generateAccessJWT(user._id);
-    const url = `${process.env.CLIENT_URL}/auth/reset-password/${accessToken}`;
+    const url = `${process.env.CLIENT_URL}/reset-password/${accessToken}`;
     sendMail(email, url, "Reset your password", "Reset password");
 
     res.status(StatusCodes.OK).json({ msg: "Reset Password" });

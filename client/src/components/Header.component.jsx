@@ -1,17 +1,25 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCart } from "../feature/user/userSlice";
 import { logoutUser } from "../feature/auth/authSlice";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 const Header = () => {
-  const [menu, setMenu] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [menu, setMenu] = useState(false);
+  const [paginate, setPaginate] = useState(true);
+  const [productOpt, setProductOpt] = useState([]);
   const [total, setTotal] = useState(0);
+
   const { currentUser } = useSelector(({ auth }) => auth);
   const { userCart, message } = useSelector(({ user }) => user);
+  const {
+    products: { products },
+  } = useSelector(({ product }) => product);
 
   const user = currentUser?.user;
   const token = currentUser?.token;
@@ -27,6 +35,16 @@ const Header = () => {
     }
     setTotal(sum);
   }, [userCart]);
+
+  useEffect(() => {
+    let data = [];
+    for (let i = 0; i < products?.length; i++) {
+      let ele = products[i];
+      data.push({ id: i, productId: ele?._id, name: ele?.title });
+    }
+
+    setProductOpt(data);
+  }, [products]);
 
   return (
     <header className="w-full">
@@ -55,12 +73,28 @@ const Header = () => {
         </div>
 
         <div className="relative flex-1 w-full">
-          <input
+          {/* <input
             type="text"
             name="price"
             id="price"
             className="block rounded-tl-md rounded-bl-md border-0 py-1.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
             placeholder="search..."
+            style={{
+              width: `calc(100% - 40px)`,
+            }}
+          /> */}
+          <Typeahead
+            id="pagination-example"
+            onPaginate={() => console.log("Results paginated")}
+            options={productOpt}
+            paginate={paginate}
+            labelKey={"name"}
+            onChange={selected => {
+              navigate(`/store/${selected[0].productId}`);
+            }}
+            minLength={2}
+            placeholder="search products here..."
+            className="block rounded-tl-md rounded-bl-md border-0 py-1.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 w-full h-[35px] my-input"
             style={{
               width: `calc(100% - 40px)`,
             }}
@@ -107,7 +141,7 @@ const Header = () => {
               </div>
 
               {!user ? (
-                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 mt-1">
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2">
                   <Link
                     to="/login"
                     className="border-b border-blue-300 w-full pb-2"
@@ -119,7 +153,7 @@ const Header = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2 mt-1">
+                <div className="hidden group-hover:block w-full text-black text-sm rounded-md bg-gray-100 font-semibold absolute px-4 py-2">
                   <Link
                     to="/profile"
                     className="border-b border-blue-300 w-full pb-2"

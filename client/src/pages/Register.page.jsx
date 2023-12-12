@@ -1,13 +1,12 @@
-import React from "react";
-import { BreadCrumb, Input, Meta } from "../components";
-import { Link } from "react-router-dom";
-import { Button } from "../components/ui/Button";
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-import { registerUser } from "../feature/auth/authSlice";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import * as Yup from "yup";
+import { BreadCrumb, Input, Meta } from "../components";
+import { Button } from "../components/ui/Button";
+import { registerUser } from "../feature/auth/authSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -23,6 +22,13 @@ const Register = () => {
     },
     onSubmit: async values => {
       dispatch(registerUser({ userData: values }));
+
+      if (isSuccess) {
+        toast.success("User Created Successfully");
+        formik.resetForm();
+      } else if (isError) {
+        toast.error(message);
+      }
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("First name is required"),
@@ -34,15 +40,6 @@ const Register = () => {
       password: Yup.string().required("Password is required"),
     }),
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success("User Created Successfully");
-      formik.resetForm();
-    } else if (isError) {
-      toast.error(message);
-    }
-  }, [isSuccess, isError, message]);
 
   return (
     <>

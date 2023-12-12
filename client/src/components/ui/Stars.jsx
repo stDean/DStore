@@ -1,13 +1,14 @@
 import ReactStars from "react-rating-stars-component";
 
-const Stars = ({ size, val }) => {
+const Stars = ({ size, val, edit=false, onChange }) => {
   return (
     <ReactStars
       count={5}
       value={val}
-      edit={false}
+      edit={edit}
       activeColor="#ffd700"
       size={size}
+      onChange={onChange}
     />
   );
 };

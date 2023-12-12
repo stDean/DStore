@@ -34,3 +34,12 @@ export const product = async ({ id }) => {
   const res = await axios.get(`${baseUrl}/product/${id}`);
   return res.data;
 };
+
+export const rate = async ({ data, token }) => {
+  const res = await axios.patch(`${baseUrl}/product/rate`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

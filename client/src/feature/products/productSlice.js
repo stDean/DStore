@@ -4,12 +4,14 @@ import {
   getProducts,
   getWishList,
   product,
+  rate,
 } from "./productService";
 
 const initialState = {
   products: [],
   product: [],
   userWishList: [],
+  productRate: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -80,6 +82,22 @@ export const getUserWishList = createAsyncThunk(
   }
 );
 
+export const rateProduct = createAsyncThunk(
+  "product/rate-product",
+  async ({ token, data }, { rejectWithValue }) => {
+    try {
+      return await rate({ token, data });
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.msg) {
+        return rejectWithValue(error.response.data.msg);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -139,6 +157,21 @@ const productSlice = createSlice({
         state.message = "Product added to wishlist";
       })
       .addCase(singleProduct.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = "Something went wrong";
+      })
+      .addCase(rateProduct.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(rateProduct.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.productRate = payload;
+        state.message = "Product has been rated";
+      })
+      .addCase(rateProduct.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

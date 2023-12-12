@@ -1,15 +1,15 @@
 import React from "react";
 import Stars from "./Stars";
 
-const Comments = ({ comment, commentBy, commentDate }) => {
+const Comments = ({ comment, val }) => {
   return (
     <div className="py-6 flex items-center justify-between border-b last:border-none">
       <div className="">
-        <p className="text-sm font-semibold text-black pb-2">
+        {/* <p className="text-sm font-semibold text-black pb-2">
           {commentBy}
           <span className="text-gray-500 text-xs"> on </span> {commentDate}
-        </p>
-        <Stars size={15} />
+        </p> */}
+        <Stars size={15} val={val} />
         <p className="text-sm pt-2">{comment}</p>
       </div>
 

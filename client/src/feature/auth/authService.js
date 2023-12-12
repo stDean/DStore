@@ -35,3 +35,12 @@ export const forgot = async ({ data }) => {
   const res = await axios.post(`${baseUrl}/auth/forget-password`, data);
   return res.data;
 };
+
+export const reset = async ({ data, token }) => {
+  const res = await axios.patch(`${baseUrl}/auth/reset-password`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

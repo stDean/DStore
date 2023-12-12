@@ -34,21 +34,24 @@ const SingleProduct = () => {
 
   const [alreadyAdded, setAlreadyAdded] = useState(false);
 
-  const {
-    currentUser: { token },
-  } = useSelector(({ auth }) => auth);
+  const { currentUser } = useSelector(({ auth }) => auth);
   const {
     products: { products },
     product,
+    message
   } = useSelector(({ product }) => product);
+
+  const { token } = currentUser || "";
 
   const { isSuccess, isError } = useSelector(({ user }) => user);
   const { userCart } = useSelector(({ user }) => user);
 
   useEffect(() => {
     dispatch(singleProduct({ id }));
-    dispatch(getUserCart({ token }));
-  }, [dispatch, id]);
+    if (token) {
+      dispatch(getUserCart({ token }));
+    }
+  }, [dispatch, id, token, message]);
 
   useEffect(() => {
     for (let i = 0; i < userCart.length; i++) {
@@ -92,7 +95,7 @@ const SingleProduct = () => {
       <Meta title="Single Product" />
 
       <div className="w-full bg-[#f5f5f7]">
-        <BreadCrumb text="The Title of the product goes here" />
+        <BreadCrumb text={product?.title} />
 
         <div className="max-w-7xl mx-auto mt-8 pb-8 space-y-6">
           <div className="bg-white rounded-lg p-4 flex gap-6">
@@ -278,7 +281,7 @@ const SingleProduct = () => {
             <h1 className="text-lg font-semibold">Reviews</h1>
 
             <div className="text-xs text-gray-500 bg-white px-6 py-6 rounded-md">
-              <Review />
+              <Review product={product} token={token} />
             </div>
           </div>
 
@@ -293,7 +296,7 @@ const SingleProduct = () => {
                     item._id !== id && <Collection key={item._id} item={item} />
                 )
                 .filter(v => v)
-                .filter((_, i) => i <= 6)}
+                .filter((_, i) => i <= 5)}
             </div>
           </div>
         </div>

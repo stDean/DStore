@@ -139,3 +139,29 @@ footer {
   background-size: cover;
   background-position: center center;
 }
+
+.my-input>div {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.my-input>div input {
+  width: 100%;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding: 0 6px;
+}
+
+.my-input #pagination-example {
+  background: white;
+  z-index: 1000;
+  margin-top: 2px;
+}
+
+.my-input #pagination-example a {
+  display: block;
+  padding: 4px 6px;
+}

@@ -98,10 +98,13 @@ const ProductCtrl = {
     res.status(StatusCodes.OK).json({ msg: "Product deleted!." });
   },
   rateProduct: async (req, res) => {
+    console.log(req.user);
     const {
       user: { _id: userId },
       body: { star, productId, comment },
     } = req;
+
+    console.log({ userId, productId, star, comment });
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -147,7 +150,9 @@ const ProductCtrl = {
         totalRatings: accumulatedProductRating,
       },
       { new: true, runValidators: true }
-    );
+    )
+      .populate({ path: "ratings", select: "ratingBy" })
+      .exec();
 
     return res.status(StatusCodes.OK).json(finalProduct);
   },

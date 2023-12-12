@@ -25,7 +25,7 @@ router
   .route("/")
   .get(getProducts)
   .post([AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE], createProduct);
-router.patch("/rate", rateProduct);
+router.patch("/rate", AUTH_MIDDLEWARE, rateProduct);
 router.post(
   "/upload",
   [AUTH_MIDDLEWARE, ADMIN_MIDDLEWARE],

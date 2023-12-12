@@ -27,6 +27,8 @@ const images = [
 
 const Store = () => {
   const [grid, setGrid] = useState("col-span-2");
+  const [sort, setSort] = useState("title");
+
   const {
     products: { products },
   } = useSelector(({ product }) => product);
@@ -41,14 +43,16 @@ const Store = () => {
           <div className="">
             <select
               id="countries"
-              defaultValue="feature"
+              defaultValue={sort}
+              onChange={e => setSort(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg block w-full p-2 mr-10"
             >
-              <option value="feature">Featured</option>
-              <option value="best-seller">Best Seller</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option value="title">Alphabetical (A - Z)</option>
+              <option value="-title">Alphabetical (Z - A)</option>
+              <option value="price">Price (Low - High)</option>
+              <option value="-price">Price (High - Low)</option>
+              <option value="createdAt">Old - New</option>
+              <option value="-createdAt">New - Old</option>
             </select>
           </div>
         </div>

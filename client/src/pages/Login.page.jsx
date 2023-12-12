@@ -1,13 +1,12 @@
-import React from "react";
-import { BreadCrumb, Input, Meta } from "../components";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../components/ui/Button";
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-import { loginUser } from "../feature/auth/authSlice";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import * as Yup from "yup";
+import { BreadCrumb, Input, Meta } from "../components";
+import { Button } from "../components/ui/Button";
+import { loginUser } from "../feature/auth/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,12 @@ const Login = () => {
     },
     onSubmit: async values => {
       dispatch(loginUser({ userData: values }));
-      formik.resetForm();
+      if (isSuccess) {
+        toast.success("Logged In Successful");
+        navigate("/");
+      } else if (isError) {
+        toast.error(message);
+      }
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -31,15 +35,6 @@ const Login = () => {
       password: Yup.string().required("Password is required"),
     }),
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success("Logged In Successful");
-      navigate("/");
-    } else if (isError) {
-      toast.error(message);
-    }
-  }, [isSuccess, isError, message, navigate]);
 
   return (
     <>

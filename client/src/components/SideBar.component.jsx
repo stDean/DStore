@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CheckText } from "./ui/CheckText";
 import { Color } from "./ui/Color";
 import { Tags } from "./ui/Tags";
 import { Random } from "./ui/Random";
 import CategoryFilter from "./CategoryFilter.component";
+import { useSelector } from "react-redux";
 
 const data = ["S", "M", "L", "XL", "XXL"];
 const tags = [
@@ -32,19 +33,45 @@ const random = [
 ];
 
 const SideBar = () => {
+  const [brand, setBrand] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [tags, setTags] = useState([]);
+
+  const {
+    products: { products },
+  } = useSelector(({ product }) => product);
+
+  useEffect(() => {
+    let brandPro = [];
+    let cat = [];
+    let tag = [];
+    let color = [];
+    for (let i = 0; i < products?.length; i++) {
+      const element = products[i];
+      brandPro.push(element?.brand);
+      cat.push(element?.category);
+      tag.push(element?.tag);
+    }
+    setBrand(brandPro);
+    setCategory(cat);
+    setTags(tag);
+  }, [products]);
+
+  // console.log([...new Set(category)]);
+
   return (
     <div className="col-span-3 space-y-4 overflow-hidden">
-      <CategoryFilter />
+      <CategoryFilter category={category} />
 
       <div className="bg-white rounded-lg shadow-lg p-4 space-y-6">
         <h1 className="font-semibold text-sm">Filter By</h1>
 
         <div className="space-y-5">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h1 className="text-xs font-semibold">Availability</h1>
             <CheckText text="In Stock(20)" />
             <CheckText text="Out of Stock(2)" />
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <h1 className="text-xs font-semibold">Price</h1>
@@ -72,7 +99,7 @@ const SideBar = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h1 className="text-xs font-semibold">Color</h1>
 
             <div className="flex gap-2 flex-wrap">
@@ -80,15 +107,15 @@ const SideBar = () => {
                 <Color color="black" key={i} />
               ))}
             </div>
-          </div>
+          </div> */}
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h1 className="text-xs font-semibold">Size</h1>
 
             {data.map(size => (
               <CheckText text={`${size} (10)`} key={size} />
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -96,7 +123,17 @@ const SideBar = () => {
         <h1 className="font-semibold text-sm">Product Tag</h1>
 
         <div className="flex flex-wrap gap-2">
-          {tags.map(tag => (
+          {[...new Set(tags)].map(tag => (
+            <Tags tag={tag} key={tag} />
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-lg p-4 space-y-6">
+        <h1 className="font-semibold text-sm">Product Brand</h1>
+
+        <div className="flex flex-wrap gap-2">
+          {[...new Set(brand)].map(tag => (
             <Tags tag={tag} key={tag} />
           ))}
         </div>

@@ -1,11 +1,49 @@
-import React from "react";
 import { BreadCrumb, Input, Meta } from "../components";
 import { Button } from "../components/ui/Button";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { resetPass } from "../feature/auth/authSlice";
 
 const ResetPassword = () => {
   const { token } = useParams();
-  console.log(token);
+  const dispatch = useDispatch();
+
+  const { isSuccess, isError, message } = useSelector(({ auth }) => auth);
+
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      cfPassword: "",
+    },
+    enableReinitialize: true,
+    onSubmit: async values => {
+      if (values.password !== values.cfPassword) {
+        toast.error("password dont match");
+      } else {
+        dispatch(
+          resetPass({
+            token,
+            data: { password: values.password },
+          })
+        );
+
+        if (isSuccess) {
+          toast.success(message);
+          formik.resetForm();
+        } else if (isError) {
+          toast.error(message);
+        }
+      }
+    },
+    validationSchema: Yup.object({
+      password: Yup.string().required("Email is required"),
+      cfPassword: Yup.string().required("Email is required"),
+    }),
+  });
+
   return (
     <>
       <Meta title="Reset Password" />
@@ -20,12 +58,24 @@ const ResetPassword = () => {
                 Reset Password
               </h1>
 
-              <form action="" className="space-y-4">
-                <Input type="password" name="password" placeholder="Password" />
+              <form
+                action=""
+                className="space-y-4"
+                onSubmit={formik.handleSubmit}
+              >
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                />
                 <Input
                   type="password"
                   name="cfPassword"
                   placeholder="Confirm Password"
+                  value={formik.values.cfPassword}
+                  onChange={formik.handleChange}
                 />
 
                 <div className="flex gap-4 items-center">
@@ -34,8 +84,6 @@ const ResetPassword = () => {
                     <Link to="/login">CANCEL</Link>
                   </p>
                 </div>
-
-                <button>Hello</button>
               </form>
             </div>
           </div>

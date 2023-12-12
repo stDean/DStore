@@ -10,7 +10,7 @@ import { forgotPass } from "../feature/auth/authSlice";
 const ForgotPassword = () => {
   const dispatch = useDispatch();
 
-  const { isSuccess, isError } = useSelector(({ auth }) => auth);
+  const { isSuccess, isError, message } = useSelector(({ auth }) => auth);
 
   const formik = useFormik({
     initialValues: {
@@ -22,7 +22,7 @@ const ForgotPassword = () => {
       dispatch(forgotPass({ data: values }));
 
       if (isSuccess) {
-        toast.success("Profile Updated");
+        toast.success(message);
         formik.resetForm();
       } else if (isError) {
         toast.error(message);
@@ -34,6 +34,7 @@ const ForgotPassword = () => {
         .required("Email is required"),
     }),
   });
+  
   return (
     <>
       <Meta title="Forgot Password" />

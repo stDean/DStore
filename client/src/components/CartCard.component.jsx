@@ -34,9 +34,9 @@ const CartCard = ({ cart, token }) => {
         <div className="text-sm text-graay-400 space-y-3 ml-4 text-gray-500">
           <p>{product.title}</p>
 
-          <p className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center">
             Color: <Color color={color.title} />
-          </p>
+          </div>
         </div>
       </div>
 

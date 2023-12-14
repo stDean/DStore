@@ -38,7 +38,6 @@ const Profile = () => {
 
       if (isSuccess) {
         toast.success("Profile Updated");
-        formik.resetForm();
       } else if (isError) {
         toast.error(message);
       }
@@ -52,7 +51,6 @@ const Profile = () => {
       mobile: Yup.string().required("Mobile number is required"),
     }),
   });
-
 
   return (
     <>

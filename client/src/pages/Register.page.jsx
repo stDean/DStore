@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { BreadCrumb, Input, Meta } from "../components";
@@ -10,6 +10,8 @@ import { registerUser } from "../feature/auth/authSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { isSuccess, isError, message } = useSelector(({ auth }) => auth);
 
   const formik = useFormik({
@@ -26,6 +28,7 @@ const Register = () => {
       if (isSuccess) {
         toast.success("User Created Successfully");
         formik.resetForm();
+        navigate("/login");
       } else if (isError) {
         toast.error(message);
       }

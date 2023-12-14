@@ -32,12 +32,13 @@ import {
 
 function App() {
   const dispatch = useDispatch();
+
+  const { currentUser } = useSelector(({ auth }) => auth);
+
   useEffect(() => {
     dispatch(Blogs());
     dispatch(Products());
   }, [dispatch]);
-
-  const { currentUser } = useSelector(({ auth }) => auth);
 
   return (
     <BrowserRouter>
@@ -51,23 +52,29 @@ function App() {
           <Route path="compare" element={<CompareProductPage />} />
           <Route
             path="wishlist"
-            element={currentUser ? <WishlistPage /> : <Navigate to="/login" />}
+            element={
+              currentUser?.user ? <WishlistPage /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="login"
-            element={currentUser ? <Navigate to="/" /> : <LoginPage />}
+            element={currentUser?.user ? <Navigate to="/" /> : <LoginPage />}
           />
           <Route
             path="signup"
-            element={currentUser ? <Navigate to="/" /> : <RegisterPage />}
+            element={currentUser?.user ? <Navigate to="/" /> : <RegisterPage />}
           />
           <Route
             path="forgot-password"
-            element={currentUser ? <Navigate to="/" /> : <ForgotPasswordPage />}
+            element={
+              currentUser?.user ? <Navigate to="/" /> : <ForgotPasswordPage />
+            }
           />
           <Route
             path="reset-password/:token"
-            element={currentUser ? <Navigate to="/" /> : <ResetPasswordPage />}
+            element={
+              currentUser?.user ? <Navigate to="/" /> : <ResetPasswordPage />
+            }
           />
           <Route path="blog/:id" element={<SingleBlogPage />} />
           <Route path="store/:id" element={<SingleProductPage />} />
@@ -76,26 +83,34 @@ function App() {
           <Route
             path="shipping"
             element={
-              !currentUser ? <Navigate to="/" /> : <ShippingPolicyPage />
+              !currentUser?.user ? <Navigate to="/" /> : <ShippingPolicyPage />
             }
           />
           <Route path="terms&condition" element={<TnCPage />} />
           <Route
             path="cart"
-            element={currentUser ? <CartPage /> : <Navigate to="/login" />}
+            element={
+              currentUser?.user ? <CartPage /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="my-orders"
-            element={currentUser ? <OrderPage /> : <Navigate to="/login" />}
+            element={
+              currentUser?.user ? <OrderPage /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="profile"
-            element={currentUser ? <ProfilePage /> : <Navigate to="/login" />}
+            element={
+              currentUser?.user ? <ProfilePage /> : <Navigate to="/login" />
+            }
           />
         </Route>
         <Route
           path="checkout"
-          element={currentUser ? <CheckoutPage /> : <Navigate to="/login" />}
+          element={
+            currentUser?.user ? <CheckoutPage /> : <Navigate to="/login" />
+          }
         />
       </Routes>
     </BrowserRouter>

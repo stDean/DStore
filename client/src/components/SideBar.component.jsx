@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { CheckText } from "./ui/CheckText";
-import { Color } from "./ui/Color";
-import { Tags } from "./ui/Tags";
-import { Random } from "./ui/Random";
-import CategoryFilter from "./CategoryFilter.component";
 import { useSelector } from "react-redux";
+import CategoryFilter from "./CategoryFilter.component";
+import { Random } from "./ui/Random";
+import { Tags } from "./ui/Tags";
 
-const data = ["S", "M", "L", "XL", "XXL"];
-const tags = [
-  "Headphones",
-  "Laptops",
-  "Mobile Phones",
-  "Watches",
-  "Speakers",
-  "Tablets",
-  "Pods",
-  "Sony",
-  "Apple",
-];
+// const data = ["S", "M", "L", "XL", "XXL"];
+// const tags = [
+//   "Headphones",
+//   "Laptops",
+//   "Mobile Phones",
+//   "Watches",
+//   "Speakers",
+//   "Tablets",
+//   "Pods",
+//   "Sony",
+//   "Apple",
+// ];
 
 const random = [
   {
@@ -45,7 +43,7 @@ const SideBar = () => {
     let brandPro = [];
     let cat = [];
     let tag = [];
-    let color = [];
+    // let color = [];
     for (let i = 0; i < products?.length; i++) {
       const element = products[i];
       brandPro.push(element?.brand);

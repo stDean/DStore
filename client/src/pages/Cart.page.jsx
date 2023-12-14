@@ -25,7 +25,8 @@ const Cart = () => {
       sum += Math.floor(Number(userCart[i].quantity * userCart[i].price));
     }
     setTotal(sum);
-  }, [userCart, total]);
+    dispatch(getUserCart({ token }));
+  }, [dispatch, userCart, token]);
 
   if (userCart.length === 0) {
     return <div className="text-center text-xl my-4">Your cart is empty!!</div>;
@@ -40,8 +41,11 @@ const Cart = () => {
 
         <div className="max-w-7xl mx-auto mt-8 pb-8">
           <div className="w-full flex justify-around items-center border-b mb-4 border-gray-300">
-            {checkOutHeader.map(i => (
-              <div key={i} className="first:w-1/2 font-semibold pb-4">
+            {checkOutHeader.map((i, idx) => (
+              <div
+                key={`${i} - ${idx}`}
+                className="first:w-1/2 font-semibold pb-4"
+              >
                 {i}
               </div>
             ))}
@@ -49,7 +53,7 @@ const Cart = () => {
 
           <div className="pb-6">
             {userCart?.map(cart => (
-              <CartCard ket={cart._id} cart={cart} token={token} />
+              <CartCard key={cart._id} cart={cart} token={token} />
             ))}
           </div>
 

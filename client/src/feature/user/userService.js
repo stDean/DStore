@@ -28,6 +28,15 @@ export const removeCartItem = async ({ token, cartId }) => {
   return res.data;
 };
 
+export const clearCartItem = async ({ token }) => {
+  const res = await axios.delete(`${baseUrl}/cart/empty`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
 export const updateQty = async ({ token, cartId, quantity }) => {
   const res = await axios.patch(
     `${baseUrl}/cart/updateQty/${cartId}`,

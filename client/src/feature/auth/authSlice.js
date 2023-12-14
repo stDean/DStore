@@ -14,7 +14,7 @@ const initialState = {
 };
 
 export const registerUser = createAsyncThunk(
-  "auth/admin-register",
+  "auth/register",
   async ({ userData }, { rejectWithValue }) => {
     try {
       return await register({ userData });
@@ -30,7 +30,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  "auth/admin-login",
+  "auth/login",
   async ({ userData }, { rejectWithValue }) => {
     try {
       return await login({ userData });
@@ -46,7 +46,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk(
-  "auth/admin-logout",
+  "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
       return await logout();
@@ -105,6 +105,7 @@ export const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.message = "success";
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
@@ -119,6 +120,7 @@ export const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.currentUser = payload;
         state.message = "success";
       })
@@ -135,6 +137,7 @@ export const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.currentUser = [];
         state.message = payload.msg;
       })
@@ -150,6 +153,7 @@ export const authSlice = createSlice({
       .addCase(forgotPass.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.message = "Reset link has been sent to your email.";
       })
       .addCase(forgotPass.rejected, (state, { payload }) => {
@@ -165,6 +169,7 @@ export const authSlice = createSlice({
       .addCase(resetPass.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.message = "Password Reset Successful";
       })
       .addCase(resetPass.rejected, (state, { payload }) => {

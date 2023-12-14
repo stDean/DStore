@@ -5,7 +5,6 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { singleBlog } from "../feature/blog/blogSlice";
-// import { Button } from "../components/ui/Button";
 
 const SingleBlog = () => {
   const dispatch = useDispatch();
@@ -16,7 +15,7 @@ const SingleBlog = () => {
 
   useEffect(() => {
     dispatch(singleBlog({ id }));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   console.log(blog);
   return (

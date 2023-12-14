@@ -25,8 +25,10 @@ const Header = () => {
   const token = currentUser?.token;
 
   useEffect(() => {
-    dispatch(getUserCart({ token }));
-  }, [dispatch, message, token]);
+    if (user) {
+      dispatch(getUserCart({ token }));
+    }
+  }, [dispatch, message, token, user]);
 
   useEffect(() => {
     let sum = 0;

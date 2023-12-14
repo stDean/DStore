@@ -1,16 +1,20 @@
-import { Link } from "react-router-dom";
-import { CheckoutCart } from "../components";
-import { MdKeyboardBackspace } from "react-icons/md";
-import { BsArrowRight } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import { BsArrowRight } from "react-icons/bs";
+import { MdKeyboardBackspace } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { processUserOrder } from "../feature/user/userSlice";
+import * as Yup from "yup";
+import { CheckoutCart } from "../components";
+import {
+  clearUserCart,
+  processUserOrder
+} from "../feature/user/userSlice";
 
 const Checkout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userCart, userOrder, isSuccess, isError } = useSelector(
     ({ user }) => user
@@ -67,6 +71,8 @@ const Checkout = () => {
       if (userOrder && isSuccess) {
         toast.success("Order Created Successfully");
         formik.resetForm();
+        dispatch(clearUserCart({ token }));
+        navigate("/");
       } else if (isError) {
         toast.error("something went wrong");
       }

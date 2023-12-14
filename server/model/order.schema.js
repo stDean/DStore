@@ -81,6 +81,10 @@ var orderSchema = new mongoose.Schema(
       type: String,
       default: "Ordered",
     },
+    month: {
+      type: String,
+      default: new Date().getMonth(),
+    },
   },
   { timestamps: true }
 );

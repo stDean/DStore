@@ -21,7 +21,7 @@ const ResetPassword = () => {
     enableReinitialize: true,
     onSubmit: async values => {
       if (values.password !== values.cfPassword) {
-        toast.error("password dont match");
+        toast.error("password don't match");
       } else {
         dispatch(
           resetPass({
@@ -39,8 +39,8 @@ const ResetPassword = () => {
       }
     },
     validationSchema: Yup.object({
-      password: Yup.string().required("Email is required"),
-      cfPassword: Yup.string().required("Email is required"),
+      password: Yup.string().required("Password is required"),
+      cfPassword: Yup.string().required("Confirm Password is required"),
     }),
   });
 

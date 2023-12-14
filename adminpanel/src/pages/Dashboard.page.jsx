@@ -1,8 +1,8 @@
 import { Column } from "@ant-design/plots";
-import { DashStatus, Review } from "../components";
 import { Table } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DashStatus } from "../components";
 import {
   getAllOrders,
   getMonthlyOrders,
@@ -20,25 +20,22 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "Product",
+    title: "Product Count",
     dataIndex: "product",
+  },
+  {
+    title: "Product Price",
+    dataIndex: "price",
+  },
+  {
+    title: "Product Price After Discount",
+    dataIndex: "dPrice",
   },
   {
     title: "Status",
     dataIndex: "status",
   },
 ];
-
-const data1 = [];
-
-for (let i = 0; i < 40; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -153,6 +150,19 @@ const Dashboard = () => {
       },
     },
   };
+
+  const data1 = [];
+
+  for (let i = 0; i < allOrders?.length; i++) {
+    data1.push({
+      key: i + 1,
+      name: `${allOrders[i]?.orderBy?.firstName} ${allOrders[i]?.orderBy?.lastName}`,
+      product: allOrders[i]?.orderItems?.length,
+      price: allOrders[i]?.totalPrice,
+      dPrice: allOrders[i]?.totalPriceAfterDiscount,
+      status: allOrders[i]?.orderStatus,
+    });
+  }
 
   return (
     <>

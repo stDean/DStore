@@ -18,7 +18,6 @@ const ForgotPassword = () => {
     },
     enableReinitialize: true,
     onSubmit: async values => {
-      console.log(values);
       dispatch(forgotPass({ data: values }));
 
       if (isSuccess) {

@@ -22,7 +22,7 @@ router.route("/user").get(getUserOrders);
 
 router.route("/getMonthData").get(ADMIN_MIDDLEWARE, getMonthWiseOrderIncome);
 router.route("/getYearlyOrder").get(ADMIN_MIDDLEWARE, getYearlyTotalOrder);
-router.route("/user/:id").get(ADMIN_MIDDLEWARE, getSingleUsersOrderByAdmin);
+router.route("/user/:id/:orderId").get(ADMIN_MIDDLEWARE, getSingleUsersOrderByAdmin);
 router.route("/cash").post(createOrder);
 router.route("/:id").get(getUserOrder).delete(ADMIN_MIDDLEWARE, deleteOrder);
 router.route("/update/:id").patch(ADMIN_MIDDLEWARE, updateUserOrder);

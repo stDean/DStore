@@ -12,7 +12,7 @@ import * as Yup from "yup";
 import { Button, CustomInput } from "../components";
 import { Brands } from "../features/brand/brandSlice";
 import { productCategory } from "../features/category/categorySlice";
-import { Colors, singleColor } from "../features/color/colorSlice";
+import { Colors } from "../features/color/colorSlice";
 import {
   createProducts,
   editProducts,

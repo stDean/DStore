@@ -73,18 +73,18 @@ const Orders = () => {
       name: `${allOrders[i]?.orderBy.firstName} ${allOrders[i]?.orderBy.lastName}`,
       product: (
         <Link
-          to={`/admin/orders/${allOrders[i]?.orderBy._id}`}
+          to={`/admin/orders/${allOrders[i]?.orderBy._id}/${allOrders[i]?._id}`}
           className="hover:underline hover:underline-offset-2"
         >
           view all orders
         </Link>
       ),
-      amount: allOrders[i]?.paymentIntent.amount,
+      amount: allOrders[i]?.totalPrice,
       date: new Date(allOrders[i]?.createdAt).toLocaleString(),
       action: (
         <div className="flex gap-3 justify-center">
           <Link
-            to={`/admin/orders/${allOrders[i]?._id}`}
+            to={`/admin/orders/${allOrders[i]?.orderBy._id}/${allOrders[i]?._id}`}
             className="text-[18px] text-green-500/60 hover:text-green-500"
           >
             <AiOutlineEye />

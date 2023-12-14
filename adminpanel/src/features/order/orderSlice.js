@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   deleteOrd,
-  editOrd,
+  updateOrder,
   getMonthlyOrder,
   getOrdByUserId,
   getOrders,
@@ -10,8 +10,10 @@ import {
 
 const initialState = {
   orders: [],
+  ordersByUser: [],
   orderByMonth: [],
   yearlyOrder: [],
+  editOrder: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -52,9 +54,9 @@ export const deleteOrder = createAsyncThunk(
 
 export const getOrderByUserId = createAsyncThunk(
   "order/get-orderByUser",
-  async ({ id, token }, { rejectWithValue }) => {
+  async ({ id, token, orderId }, { rejectWithValue }) => {
     try {
-      return await getOrdByUserId({ id, token });
+      return await getOrdByUserId({ id, token, orderId });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -68,9 +70,9 @@ export const getOrderByUserId = createAsyncThunk(
 
 export const editOrder = createAsyncThunk(
   "order/edit-order",
-  async ({ token, data, id }, { rejectWithValue }) => {
+  async ({ token, data, orderId }, { rejectWithValue }) => {
     try {
-      return await editOrd({ data, token, id });
+      return await updateOrder({ data, token, orderId });
     } catch (error) {
       // return custom error message from backend if present
       if (error.response && error.response.data.msg) {
@@ -158,7 +160,7 @@ export const orderSlice = createSlice({
       .addCase(getOrderByUserId.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.orders = payload;
+        state.ordersByUser = payload;
         state.message = "orders by a user";
       })
       .addCase(getOrderByUserId.rejected, (state, { payload }) => {
@@ -174,7 +176,7 @@ export const orderSlice = createSlice({
       .addCase(editOrder.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.orders = payload;
+        state.editOrder = payload;
         state.message = "updated";
       })
       .addCase(editOrder.rejected, (state, { payload }) => {

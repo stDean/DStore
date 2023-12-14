@@ -19,25 +19,12 @@ export const deleteOrd = async ({ id, token }) => {
   return res.data;
 };
 
-export const getOrdByUserId = async ({ id, token }) => {
-  const res = await axios.get(`${baseUrl}/order/user/${id}`, {
+export const getOrdByUserId = async ({ id, token, orderId }) => {
+  const res = await axios.get(`${baseUrl}/order/user/${id}/${orderId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.data;
-};
-
-export const editOrd = async ({ id, token, data }) => {
-  const res = await axios.patch(
-    `${baseUrl}/order/${id}`,
-    { status: data },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
   return res.data;
 };
 
@@ -56,5 +43,18 @@ export const getYearlyOrder = async ({ token }) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  return res.data;
+};
+
+export const updateOrder = async ({ token, orderId, data }) => {
+  const res = await axios.patch(
+    `${baseUrl}/order/update/${orderId}`,
+    { status: data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.data;
 };

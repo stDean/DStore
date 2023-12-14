@@ -1,10 +1,9 @@
-import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getOrderByUserId } from "../features/order/orderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { BiArrowBack, BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
 import { Table } from "antd";
+import { useEffect } from "react";
+import { BiArrowBack } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { editOrder, getOrderByUserId } from "../features/order/orderSlice";
 
 const columns = [
   {
@@ -43,23 +42,32 @@ const columns = [
 ];
 
 const OrderEnq = () => {
-  const { id: userId } = useParams();
+  const { id: userId, orderId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const {
-    orders: { allOrders },
+    ordersByUser: { allOrders },
   } = useSelector(({ order }) => order);
   const { user } = useSelector(({ auth }) => auth);
 
-  const allProducts = [...allOrders[0].products];
+  const allProducts = allOrders
+    ? [...allOrders[0]?.orderItems.map(i => i)]
+    : [];
 
   useEffect(() => {
-    dispatch(getOrderByUserId({ id: userId, token: user?.token }));
-  }, [dispatch, userId, user?.token]);
+    dispatch(getOrderByUserId({ id: userId, token: user?.token, orderId }));
+  }, [dispatch, userId, user?.token, orderId]);
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const orderStatusFromDb =
+    allOrders && allOrders.map(i => i.orderStatus).join("");
+
+  const setStatus = e => {
+    dispatch(editOrder({ orderId, data: e, token: user?.token }));
   };
 
   const data1 = [];
@@ -71,22 +79,21 @@ const OrderEnq = () => {
       brand: allProducts[i].product.brand,
       count: allProducts[i].quantity,
       amount: allProducts[i].product.price,
-      color: allProducts[i].product.color,
+      color: allProducts[i].color.title,
       date: allProducts[i].product.createdAt,
       action: (
         <>
-          <Link
-            to="/"
-            className="text-[18px] text-green-500/60 hover:text-green-500"
+          <select
+            name="status"
+            className="border p-2 rounded-md"
+            defaultValue={orderStatusFromDb}
+            onClick={e => setStatus(e.target.value)}
           >
-            <BiEdit />
-          </Link>
-          <Link
-            className="text-red-500/60 hover:text-red-500 text-[18px] cursor-pointer"
-            to="/"
-          >
-            <AiFillDelete />
-          </Link>
+            <option value="ordered">Ordered</option>
+            <option value="processed">Processed</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+          </select>
         </>
       ),
     });

@@ -94,7 +94,7 @@ const Login = () => {
           <button
             type="submit"
             // to="/admin"
-            className="border-0 px-3 py-2 font-bold w-full block text-center"
+            className="border-0 px-3 py-2 font-bold w-full block text-center cursor-pointer"
             style={{ background: "#ffd333" }}
           >
             Login

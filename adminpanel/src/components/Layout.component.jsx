@@ -1,38 +1,37 @@
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
 import { useState } from "react";
-import { useNavigate, Outlet, Link } from "react-router-dom";
-import { ImBlog } from "react-icons/im";
-import { IoIosNotifications } from "react-icons/io";
-import { FaClipboardList, FaBloggerB } from "react-icons/fa";
-import { SiBrandfolder } from "react-icons/si";
-import { BiCategoryAlt } from "react-icons/bi";
-import { RiCouponLine } from "react-icons/ri";
 import {
+  AiOutlineBgColors,
   AiOutlineDashboard,
   AiOutlineShoppingCart,
   AiOutlineUser,
-  AiOutlineBgColors,
 } from "react-icons/ai";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  // UploadOutlined,
-  // UserOutlined,
-  // VideoCameraOutlined,
-} from "@ant-design/icons";
+import { BiCategoryAlt } from "react-icons/bi";
+import { FaBloggerB, FaClipboardList } from "react-icons/fa";
+import { ImBlog } from "react-icons/im";
+import { IoIosNotifications } from "react-icons/io";
+import { RiCouponLine } from "react-icons/ri";
+import { SiBrandfolder } from "react-icons/si";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Layout, Menu, Button, theme } from "antd";
+import { logoutUser } from "../features/auth/authSlice";
 
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const { user, isSuccess } = useSelector(({ auth }) => auth);
 
   return (
     <Layout /* onContextMenu={e => preventDefault()} */>
@@ -188,7 +187,7 @@ const MainLayout = () => {
           <div className="flex items-center gap-4">
             <div className="relative">
               <IoIosNotifications className="fs-4" />
-              <span className="rounded-full flex justify-center items-center p-1 text-xs absolute -top-3 -right-3 h-5 w-5 bg-[#ffd333]">
+              <span className="rounded-full flex justify-center items-center p-[2px] text-xs absolute top-3 -right-3 h-5 w-5 bg-[#ffd333]">
                 3
               </span>
             </div>
@@ -209,10 +208,13 @@ const MainLayout = () => {
                   onClick={() => {
                     setMenu(menu => !menu);
                   }}
+                  className="cursor-pointer"
                 >
-                  <h5 className="mb-0 font-semibold">Navdeep</h5>
+                  <h5 className="mb-0 font-semibold">
+                    {user?.findAdmin?.firstName}
+                  </h5>
                   <p className="mb-0 text-sm text-gray-500">
-                    navdeepdahiya753@gmail.com
+                    {user?.findAdmin?.email}
                   </p>
                 </div>
 
@@ -224,11 +226,22 @@ const MainLayout = () => {
                     aria-labelledby="menu-button"
                     tabindex="-1"
                   >
-                    <li className="pl-5 -mb-8">
-                      <Link to="/admin">Dashboard</Link>
+                    <li className="pl-5 -mt-2 cursor-pointer text-black">
+                      <Link to="/admin" className="text-black">
+                        Dashboard
+                      </Link>
                     </li>
-                    <li className="pl-5">
-                      <Link to="/signout">Sign Out</Link>
+                    <li className="pl-5 -mt-4 mb-3 hover:text-blue-400 cursor-pointer ">
+                      <p
+                        onClick={() => {
+                          dispatch(logoutUser());
+                          if (isSuccess) {
+                            navigate("/");
+                          }
+                        }}
+                      >
+                        Sign Out
+                      </p>
                     </li>
                   </ul>
                 )}

@@ -1,9 +1,6 @@
 const Order = require("../model/order.schema");
-const Cart = require("../model/cart.schema");
-const Product = require("../model/product.schema");
 const { StatusCodes } = require("http-status-codes");
 const { NotFoundError, BadRequestError } = require("../errors");
-const uniqId = require("uniqid");
 
 const OrderCtrl = {
   createOrder: async (req, res) => {
@@ -53,10 +50,11 @@ const OrderCtrl = {
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
   },
   getSingleUsersOrderByAdmin: async (req, res) => {
-    const { id: userId } = req.params;
+    const { id: userId, orderId } = req.params;
 
-    const allOrders = await Order.find({ orderBy: userId })
+    const allOrders = await Order.find({ orderBy: userId, _id: orderId })
       .populate("orderItems.product")
+      .populate("orderItems.color")
       .populate("orderBy")
       .exec();
     res.status(StatusCodes.OK).json({ allOrders, nbHits: allOrders.length });
@@ -83,7 +81,7 @@ const OrderCtrl = {
 
     const updateOrderStatus = await Order.findByIdAndUpdate(
       orderId,
-      { orderStatus: status, paymentIntent: { status: status } },
+      { orderStatus: status },
       { new: true, runValidators: true }
     );
     if (!updateOrderStatus) {
